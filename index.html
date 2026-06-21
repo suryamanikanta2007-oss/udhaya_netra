@@ -2,75 +2,88 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<title>Udhaya Netram E-Paper</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Udhaya Netram Live E-Paper</title>
 
 <style>
-body{font-family:Arial;margin:0;background:#f4f4f4}
-.header{
-  background:#b30000;color:white;
-  text-align:center;padding:18px;
-  font-size:28px;font-weight:bold;
-}
-.container{width:90%;margin:auto;padding:15px}
-.card{background:white;padding:15px;margin:10px 0;border-radius:8px}
-input,button{width:100%;padding:10px;margin:6px 0}
-button{background:#b30000;color:white;border:none;cursor:pointer}
-button:hover{background:#800000}
-.news-item{
-  padding:10px;border-bottom:1px solid #ddd;
-  cursor:pointer;
-}
-.news-item:hover{background:#f1f1f1}
-iframe{width:100%;height:500px;border:none}
-small{color:gray}
+body{font-family:Arial;margin:0;background:#f4f4f4;}
+header{background:#b30000;color:white;text-align:center;padding:15px;font-size:22px;}
+nav{display:flex;justify-content:center;gap:15px;background:#900;padding:10px;}
+nav a{color:white;cursor:pointer;font-weight:bold;}
+
+.container{width:90%;margin:auto;margin-top:20px;}
+.card{background:white;padding:15px;margin-bottom:15px;border-radius:10px;}
+
+button{background:#b30000;color:white;padding:8px;border:none;cursor:pointer;margin-top:10px;}
+input{width:100%;padding:8px;margin:5px 0;}
+
+.news-item{padding:10px;border-bottom:1px solid #ddd;cursor:pointer;}
+.news-item:hover{background:#f2f2f2;}
+
+iframe{width:100%;height:80vh;border:none;}
+
+.section{display:none;}
 </style>
 </head>
 
 <body>
 
-<div class="header">UDHAYA NETRAM LIVE NEWS</div>
+<header>UDHAYA NETRAM DAILY E-PAPER</header>
+
+<nav>
+<a onclick="show('home')">Home</a>
+<a onclick="show('news')">Latest News</a>
+<a onclick="show('paper')">E-Paper</a>
+<a onclick="show('admin')">Admin</a>
+</nav>
 
 <div class="container">
 
-<!-- NEWS LIST -->
-<div class="card">
-<h2>Latest News (Live)</h2>
-<div id="newsList">Loading...</div>
+<!-- HOME -->
+<div id="home" class="section card">
+<h2>Welcome</h2>
+<p>Live Newspaper System - All Devices Sync Automatically</p>
 </div>
 
-<!-- EPAPER VIEWER -->
-<div class="card">
+<!-- NEWS -->
+<div id="news" class="section card">
+<h2>Latest News</h2>
+<div id="newsList"></div>
+</div>
+
+<!-- EPAPER -->
+<div id="paper" class="section card">
 <h2>E-Paper Viewer</h2>
-<iframe id="viewer"></iframe>
+<iframe id="pdfFrame"></iframe>
 </div>
 
 <!-- ADMIN -->
-<div class="card">
-<h2>Admin Upload</h2>
-<input type="text" id="title" placeholder="News Title">
-<input type="file" id="file" accept="application/pdf">
-<button onclick="uploadNews()">Upload PDF</button>
-<small>If upload fails, check Firebase rules + config</small>
+<div id="admin" class="section card">
+<h2>Admin Panel</h2>
+
+<input id="title" placeholder="News Title">
+<input type="file" id="pdfFile">
+<button onclick="uploadPDF()">Upload PDF</button>
+
 </div>
 
 </div>
 
 <!-- FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 
 <script>
 
-/* 🔥 STEP 1: YOUR FIREBASE CONFIG (REPLACE THIS) */
+// 🔴 Firebase Config (PUT YOUR CONFIG HERE)
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "XXXX",
-  appId: "XXXX"
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_BUCKET",
+  messagingSenderId: "YOUR_ID",
+  appId: "YOUR_APPID"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -78,77 +91,62 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const storage = firebase.storage();
 
-/* ================= LIVE NEWS LOAD ================= */
-db.collection("news")
-.orderBy("time","desc")
-.onSnapshot(snapshot => {
+/* NAV */
+function show(id){
+  document.querySelectorAll(".section").forEach(s=>s.style.display="none");
+  document.getElementById(id).style.display="block";
+}
 
-    let html = "";
+/* UPLOAD PDF */
+function uploadPDF(){
+  let title = document.getElementById("title").value;
+  let file = document.getElementById("pdfFile").files[0];
 
-    snapshot.forEach(doc => {
-        let data = doc.data();
+  if(!title || !file){
+    alert("Fill all fields");
+    return;
+  }
 
-        html += `
-        <div class="news-item" onclick="openPDF('${data.url}')">
-            📰 ${data.title}
-        </div>`;
+  let ref = storage.ref("pdfs/" + file.name);
+
+  ref.put(file).then(snapshot=>{
+    return snapshot.ref.getDownloadURL();
+  }).then(url=>{
+    
+    db.collection("news").add({
+      title: title,
+      pdf: url,
+      time: Date.now()
     });
 
-    document.getElementById("newsList").innerHTML = html || "No news found";
+    alert("Uploaded Successfully!");
+  });
+}
+
+/* REAL TIME LOAD */
+db.collection("news").orderBy("time","desc")
+.onSnapshot(snapshot=>{
+  let box = document.getElementById("newsList");
+  box.innerHTML = "";
+
+  snapshot.forEach(doc=>{
+    let data = doc.data();
+
+    box.innerHTML += `
+      <div class="news-item" onclick="openPDF('${data.pdf}')">
+        📰 ${data.title}
+      </div>
+    `;
+  });
 });
 
-/* ================= OPEN PDF ================= */
+/* OPEN PDF */
 function openPDF(url){
-    document.getElementById("viewer").src = url;
+  show('paper');
+  document.getElementById("pdfFrame").src = url;
 }
 
-/* ================= UPLOAD PDF ================= */
-function uploadNews(){
-
-    let title = document.getElementById("title").value.trim();
-    let file = document.getElementById("file").files[0];
-
-    if(!title || !file){
-        alert("Please fill all fields");
-        return;
-    }
-
-    let fileName = Date.now() + "_" + file.name;
-    let ref = storage.ref("pdfs/" + fileName);
-
-    let uploadTask = ref.put(file);
-
-    uploadTask.on("state_changed",
-
-        // progress
-        (snapshot)=>{
-            let percent = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log("Upload: " + percent.toFixed(2) + "%");
-        },
-
-        // error
-        (error)=>{
-            alert("Upload Failed: " + error.message);
-        },
-
-        // success
-        ()=>{
-            uploadTask.snapshot.ref.getDownloadURL()
-            .then(url=>{
-
-                db.collection("news").add({
-                    title: title,
-                    url: url,
-                    time: Date.now()
-                });
-
-                alert("Upload Successful!");
-                document.getElementById("title").value="";
-                document.getElementById("file").value="";
-            });
-        }
-    );
-}
+show('home');
 
 </script>
 
