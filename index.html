@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="google-site-verification" content="4MabHSXd0K7zcsXtPZYBY3-WZcOy2S9sTKC7Pe1gCzM" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Udhaya Netram Daily E-Paper</title>
@@ -193,8 +192,7 @@ footer{
 <h2>Contact</h2>
 <p><b>Editor:</b> Kadali Pallaparaju</p>
 <p><b>Phone:</b> 9848556806</p>
-<p><b>Email:</b> admin@udhayanetram.com</p>
-<p><b>Adress:</b> Udhaya netram publishers,Amalapuram,near red bridge.</p>
+<p><b>Email:</b> kr2306258@gmail.com</p>
 </div>
 
 </div>
@@ -208,11 +206,13 @@ footer{
 let news = JSON.parse(localStorage.getItem("news")) || [];
 let isAdminLoggedIn = false;
 
+/* NAVIGATION */
 function show(id){
     document.querySelectorAll(".section").forEach(s=>s.style.display="none");
     document.getElementById(id).style.display="block";
 }
 
+/* LOAD NEWS */
 function loadNews(){
     let box = document.getElementById("newsList");
     box.innerHTML = "";
@@ -233,16 +233,18 @@ function loadNews(){
     });
 }
 
+/* OPEN PDF */
 function openPDF(pdf){
     show('epaper');
     document.getElementById("pdfView").src = pdf;
 }
 
+/* LOGIN */
 function login(){
     let email = document.getElementById("adminEmail").value.trim();
     let pass = document.getElementById("adminPass").value.trim();
 
-    const ADMIN_EMAIL = "admin@udhayanetram.com";
+    const ADMIN_EMAIL = "admin@udhayanetra.com";
     const ADMIN_PASS = "1976";
 
     if(email === ADMIN_EMAIL && pass === ADMIN_PASS){
@@ -256,6 +258,7 @@ function login(){
     }
 }
 
+/* ADD NEWS (FIXED BASE64 PDF STORAGE) */
 function addNews(){
     let t = document.getElementById("title").value.trim();
     let file = document.getElementById("pdfFile").files[0];
@@ -265,21 +268,31 @@ function addNews(){
         return;
     }
 
-    let pdfURL = URL.createObjectURL(file);
+    let reader = new FileReader();
 
-    news.unshift({ title: t, pdf: pdfURL });
+    reader.onload = function(e){
+        let pdfBase64 = e.target.result;
 
-    localStorage.setItem("news", JSON.stringify(news));
+        news.unshift({ 
+            title: t, 
+            pdf: pdfBase64 
+        });
 
-    document.getElementById("title").value = "";
-    document.getElementById("pdfFile").value = "";
+        localStorage.setItem("news", JSON.stringify(news));
 
-    loadNews();
-    openPDF(pdfURL);
+        document.getElementById("title").value = "";
+        document.getElementById("pdfFile").value = "";
 
-    alert("Uploaded Successfully");
+        loadNews();
+        openPDF(pdfBase64);
+
+        alert("Uploaded Successfully");
+    };
+
+    reader.readAsDataURL(file);
 }
 
+/* DELETE NEWS */
 function deleteNews(i){
     if(confirm("Delete this news?")){
         news.splice(i,1);
@@ -288,6 +301,7 @@ function deleteNews(i){
     }
 }
 
+/* INIT */
 loadNews();
 show('home');
 
