@@ -1,24 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Udhaya Netram - Live News</title>
+<title>Udhaya Netram Live E-Paper</title>
 
 <style>
-body{font-family:Arial;background:#f4f4f4;margin:0}
+body{font-family:Arial;margin:0;background:#f4f4f4}
 .header{
   background:#b30000;color:white;
-  text-align:center;padding:20px;font-size:30px;font-weight:bold;
+  text-align:center;padding:18px;
+  font-size:28px;font-weight:bold;
 }
-.container{width:90%;margin:auto;padding:20px}
+.container{width:90%;margin:auto;padding:15px}
 .card{background:white;padding:15px;margin:10px 0;border-radius:8px}
-input,button{width:100%;padding:10px;margin:5px 0}
+input,button{width:100%;padding:10px;margin:6px 0}
 button{background:#b30000;color:white;border:none;cursor:pointer}
+button:hover{background:#800000}
+.news-item{
+  padding:10px;border-bottom:1px solid #ddd;
+  cursor:pointer;
+}
+.news-item:hover{background:#f1f1f1}
 iframe{width:100%;height:500px;border:none}
-.news-item{padding:10px;border-bottom:1px solid #ddd;cursor:pointer}
+small{color:gray}
 </style>
-
 </head>
 
 <body>
@@ -27,16 +33,26 @@ iframe{width:100%;height:500px;border:none}
 
 <div class="container">
 
-<h2>Latest News (LIVE)</h2>
-<div id="newsList"></div>
+<!-- NEWS LIST -->
+<div class="card">
+<h2>Latest News (Live)</h2>
+<div id="newsList">Loading...</div>
+</div>
 
-<h2>Admin Panel</h2>
-<input type="text" id="title" placeholder="News Title">
-<input type="file" id="file">
-<button onclick="uploadNews()">Upload PDF</button>
-
-<h2>E-Paper</h2>
+<!-- EPAPER VIEWER -->
+<div class="card">
+<h2>E-Paper Viewer</h2>
 <iframe id="viewer"></iframe>
+</div>
+
+<!-- ADMIN -->
+<div class="card">
+<h2>Admin Upload</h2>
+<input type="text" id="title" placeholder="News Title">
+<input type="file" id="file" accept="application/pdf">
+<button onclick="uploadNews()">Upload PDF</button>
+<small>If upload fails, check Firebase rules + config</small>
+</div>
 
 </div>
 
@@ -46,7 +62,8 @@ iframe{width:100%;height:500px;border:none}
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 
 <script>
-// 🔥 YOUR FIREBASE CONFIG (REPLACE THIS)
+
+/* 🔥 STEP 1: YOUR FIREBASE CONFIG (REPLACE THIS) */
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -61,11 +78,14 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const storage = firebase.storage();
 
-/* ================= LIVE LOAD ================= */
-db.collection("news").orderBy("time","desc")
-.onSnapshot(snapshot=>{
-    let html="";
-    snapshot.forEach(doc=>{
+/* ================= LIVE NEWS LOAD ================= */
+db.collection("news")
+.orderBy("time","desc")
+.onSnapshot(snapshot => {
+
+    let html = "";
+
+    snapshot.forEach(doc => {
         let data = doc.data();
 
         html += `
@@ -74,7 +94,7 @@ db.collection("news").orderBy("time","desc")
         </div>`;
     });
 
-    document.getElementById("newsList").innerHTML = html;
+    document.getElementById("newsList").innerHTML = html || "No news found";
 });
 
 /* ================= OPEN PDF ================= */
@@ -82,37 +102,54 @@ function openPDF(url){
     document.getElementById("viewer").src = url;
 }
 
-/* ================= UPLOAD NEWS ================= */
+/* ================= UPLOAD PDF ================= */
 function uploadNews(){
-    let title = document.getElementById("title").value;
+
+    let title = document.getElementById("title").value.trim();
     let file = document.getElementById("file").files[0];
 
     if(!title || !file){
-        alert("Fill all fields");
+        alert("Please fill all fields");
         return;
     }
 
-    let uploadTask = storage.ref("pdfs/"+file.name).put(file);
+    let fileName = Date.now() + "_" + file.name;
+    let ref = storage.ref("pdfs/" + fileName);
+
+    let uploadTask = ref.put(file);
 
     uploadTask.on("state_changed",
-    null,
-    (error)=>{ alert(error.message); },
-    ()=>{
-        uploadTask.snapshot.ref.getDownloadURL()
-        .then(url=>{
 
-            db.collection("news").add({
-                title:title,
-                url:url,
-                time:Date.now()
+        // progress
+        (snapshot)=>{
+            let percent = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log("Upload: " + percent.toFixed(2) + "%");
+        },
+
+        // error
+        (error)=>{
+            alert("Upload Failed: " + error.message);
+        },
+
+        // success
+        ()=>{
+            uploadTask.snapshot.ref.getDownloadURL()
+            .then(url=>{
+
+                db.collection("news").add({
+                    title: title,
+                    url: url,
+                    time: Date.now()
+                });
+
+                alert("Upload Successful!");
+                document.getElementById("title").value="";
+                document.getElementById("file").value="";
             });
-
-            alert("Uploaded Successfully!");
-            document.getElementById("title").value="";
-            document.getElementById("file").value="";
-        });
-    });
+        }
+    );
 }
+
 </script>
 
 </body>
