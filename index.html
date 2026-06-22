@@ -19,13 +19,16 @@ nav a:hover{color:yellow}
 .section{display:none;background:white;padding:20px;border-radius:8px;box-shadow:0 0 8px #ccc}
 .section.active{display:block}
 h2{color:#b30000;margin-bottom:15px}
+h3{margin-top:15px;color:#333}
 .card{background:#fff;border:1px solid #ddd;padding:15px;margin:12px 0;border-radius:6px}
-input,textarea,button{width:100%;padding:10px;margin:8px 0}
-button{background:#b30000;color:white;border:none;font-weight:bold;cursor:pointer}
+input,textarea,button{width:100%;padding:10px;margin:8px 0;font-size:16px}
+textarea{min-height:90px}
+button{background:#b30000;color:white;border:none;font-weight:bold;cursor:pointer;border-radius:5px}
 button:hover{background:#7a0000}
 .pdf-viewer{width:100%;height:80vh;border:1px solid #aaa;margin-top:15px}
 .edition-btn{background:#eee;color:#111;text-align:left;border:1px solid #ddd}
 .admin-box{max-width:500px;margin:auto}
+.status{font-weight:bold;margin-top:10px;color:#b30000}
 footer{text-align:center;background:#111;color:white;padding:20px;margin-top:30px}
 @media(max-width:600px){.logo{font-size:32px}.pdf-viewer{height:65vh}}
 </style>
@@ -61,12 +64,12 @@ footer{text-align:center;background:#111;color:white;padding:20px;margin-top:30p
 
 <section id="latest" class="section">
   <h2>Latest News</h2>
-  <div id="newsList">No news yet.</div>
+  <div id="newsList">Loading...</div>
 </section>
 
 <section id="epaper" class="section">
   <h2>Digital E-Paper</h2>
-  <div id="editionList"></div>
+  <div id="editionList">Loading...</div>
   <iframe id="pdfFrame" class="pdf-viewer"></iframe>
 </section>
 
@@ -85,23 +88,28 @@ footer{text-align:center;background:#111;color:white;padding:20px;margin-top:30p
     <div id="loginBox">
       <input type="email" id="adminEmail" placeholder="Admin Email">
       <input type="password" id="adminPassword" placeholder="Password">
-      <button onclick="loginAdmin()">Login</button>
+      <button type="button" onclick="loginAdmin()">Login</button>
     </div>
 
     <div id="adminPanel" style="display:none">
       <h3>Upload Daily PDF</h3>
+
       <input type="text" id="pdfTitle" placeholder="PDF Title">
       <input type="date" id="pdfDate">
       <input type="file" id="pdfFile" accept="application/pdf">
-      <button onclick="uploadPDF()">Upload PDF</button>
+
+      <button type="button" onclick="uploadPDF()">Upload PDF</button>
 
       <h3>Add Latest News</h3>
+
       <input type="text" id="newsTitle" placeholder="News Title">
       <textarea id="newsText" placeholder="News Details"></textarea>
-      <button onclick="addNews()">Add News</button>
 
-      <button onclick="logoutAdmin()">Logout</button>
+      <button type="button" onclick="addNews()">Add News</button>
+      <button type="button" onclick="logoutAdmin()">Logout</button>
     </div>
+
+    <p id="statusMsg" class="status"></p>
   </div>
 </section>
 
@@ -113,12 +121,33 @@ footer{text-align:center;background:#111;color:white;padding:20px;margin-top:30p
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDmnza1ol0Rvp-ciw3DsdZkr8NIfAGzj8A",
+  apiKey: "AIzaSyDmnza1ol0RVp-ciw3DsdZKr8NIFAGzj8A",
   authDomain: "udhayanetram.firebaseapp.com",
   projectId: "udhayanetram",
   storageBucket: "udhayanetram.firebasestorage.app",
@@ -132,109 +161,225 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 const auth = getAuth(app);
 
+function status(msg){
+  document.getElementById("statusMsg").innerText = msg;
+}
+
 window.showPage = function(id){
-  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 };
 
-onAuthStateChanged(auth,user=>{
-  document.getElementById("loginBox").style.display=user?"none":"block";
-  document.getElementById("adminPanel").style.display=user?"block":"none";
+onAuthStateChanged(auth, user => {
+  document.getElementById("loginBox").style.display = user ? "none" : "block";
+  document.getElementById("adminPanel").style.display = user ? "block" : "none";
+
+  if(user){
+    status("Admin logged in");
+  }else{
+    status("");
+  }
 });
 
 window.loginAdmin = async function(){
   try{
-    await signInWithEmailAndPassword(
-      auth,
-      document.getElementById("adminEmail").value,
-      document.getElementById("adminPassword").value
-    );
-    alert("Login successful");
-  }catch(e){ alert(e.message); }
+    const email = document.getElementById("adminEmail").value.trim();
+    const password = document.getElementById("adminPassword").value.trim();
+
+    if(!email || !password){
+      status("Enter email and password");
+      return;
+    }
+
+    await signInWithEmailAndPassword(auth, email, password);
+    status("Login successful");
+  }catch(error){
+    status("Login failed: " + error.message);
+  }
 };
 
-window.logoutAdmin = async function(){ await signOut(auth); };
+window.logoutAdmin = async function(){
+  await signOut(auth);
+  status("Logged out");
+};
 
 window.uploadPDF = async function(){
-  const title=document.getElementById("pdfTitle").value;
-  const date=document.getElementById("pdfDate").value;
-  const file=document.getElementById("pdfFile").files[0];
+  try{
+    const title = document.getElementById("pdfTitle").value.trim();
+    const date = document.getElementById("pdfDate").value;
+    const fileInput = document.getElementById("pdfFile");
+    const file = fileInput.files[0];
 
-  if(!title||!date||!file){ alert("Fill all PDF fields"); return; }
+    if(!auth.currentUser){
+      status("Please login first");
+      return;
+    }
 
-  const fileRef=ref(storage,"epapers/"+Date.now()+"-"+file.name);
-  await uploadBytes(fileRef,file);
-  const url=await getDownloadURL(fileRef);
+    if(!title || !date || !file){
+      status("Fill PDF title, date and select PDF file");
+      return;
+    }
 
-  await addDoc(collection(db,"editions"),{
-    title,date,url,createdAt:serverTimestamp()
-  });
+    if(file.type !== "application/pdf"){
+      status("Only PDF file allowed");
+      return;
+    }
 
-  alert("PDF uploaded successfully");
-  loadEditions();
+    status("Uploading PDF... Please wait");
+
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const filePath = "epapers/" + Date.now() + "_" + safeName;
+    const fileRef = ref(storage, filePath);
+
+    const uploadResult = await uploadBytes(fileRef, file);
+    const url = await getDownloadURL(uploadResult.ref);
+
+    await addDoc(collection(db, "editions"), {
+      title: title,
+      date: date,
+      url: url,
+      path: filePath,
+      createdAt: serverTimestamp()
+    });
+
+    document.getElementById("pdfTitle").value = "";
+    document.getElementById("pdfDate").value = "";
+    fileInput.value = "";
+
+    status("PDF uploaded successfully");
+
+    await loadEditions();
+    showPage("epaper");
+
+  }catch(error){
+    console.error(error);
+    status("Upload failed: " + error.message);
+  }
 };
 
 window.addNews = async function(){
-  const title=document.getElementById("newsTitle").value;
-  const text=document.getElementById("newsText").value;
+  try{
+    const title = document.getElementById("newsTitle").value.trim();
+    const text = document.getElementById("newsText").value.trim();
 
-  if(!title||!text){ alert("Fill news details"); return; }
+    if(!auth.currentUser){
+      status("Please login first");
+      return;
+    }
 
-  await addDoc(collection(db,"news"),{
-    title,text,createdAt:serverTimestamp()
-  });
+    if(!title || !text){
+      status("Fill news title and details");
+      return;
+    }
 
-  alert("News added");
-  loadNews();
+    await addDoc(collection(db, "news"), {
+      title: title,
+      text: text,
+      createdAt: serverTimestamp()
+    });
+
+    document.getElementById("newsTitle").value = "";
+    document.getElementById("newsText").value = "";
+
+    status("News added successfully");
+
+    await loadNews();
+    showPage("latest");
+
+  }catch(error){
+    console.error(error);
+    status("News add failed: " + error.message);
+  }
 };
 
 async function loadEditions(){
-  const list=document.getElementById("editionList");
-  const home=document.getElementById("homeLatest");
-  list.innerHTML="";
-  home.innerHTML="";
+  const list = document.getElementById("editionList");
+  const home = document.getElementById("homeLatest");
+  const frame = document.getElementById("pdfFrame");
 
-  const q=query(collection(db,"editions"),orderBy("createdAt","desc"));
-  const snap=await getDocs(q);
+  list.innerHTML = "Loading...";
+  home.innerHTML = "";
 
-  if(snap.empty){
-    list.innerHTML="<p>No PDF uploaded yet.</p>";
-    return;
-  }
+  try{
+    const q = query(collection(db, "editions"), orderBy("createdAt", "desc"));
+    const snap = await getDocs(q);
 
-  let first=true;
-  snap.forEach(doc=>{
-    const e=doc.data();
-    const btn=document.createElement("button");
-    btn.className="edition-btn";
-    btn.innerHTML=`<b>${e.title}</b><br><small>${e.date}</small>`;
-    btn.onclick=()=>document.getElementById("pdfFrame").src=e.url;
-    list.appendChild(btn);
+    list.innerHTML = "";
 
-    if(first){
-      document.getElementById("pdfFrame").src=e.url;
-      home.innerHTML=`<div class="card"><h3>Today's E-Paper</h3><p>${e.title}</p><button onclick="showPage('epaper')">Open E-Paper</button></div>`;
-      first=false;
+    if(snap.empty){
+      list.innerHTML = "<p>No PDF uploaded yet.</p>";
+      frame.src = "";
+      home.innerHTML = "<p>No e-paper uploaded yet.</p>";
+      return;
     }
-  });
+
+    let first = true;
+
+    snap.forEach(docSnap => {
+      const e = docSnap.data();
+
+      const btn = document.createElement("button");
+      btn.className = "edition-btn";
+      btn.innerHTML = `<b>${e.title}</b><br><small>${e.date}</small>`;
+
+      btn.onclick = () => {
+        frame.src = e.url;
+        showPage("epaper");
+      };
+
+      list.appendChild(btn);
+
+      if(first){
+        frame.src = e.url;
+
+        home.innerHTML = `
+          <div class="card">
+            <h3>Today's E-Paper</h3>
+            <p>${e.title}</p>
+            <p><small>${e.date}</small></p>
+            <button type="button" onclick="showPage('epaper')">Open E-Paper</button>
+          </div>
+        `;
+
+        first = false;
+      }
+    });
+
+  }catch(error){
+    console.error(error);
+    list.innerHTML = "<p>Error loading PDFs: " + error.message + "</p>";
+    home.innerHTML = "<p>Error loading latest PDF.</p>";
+  }
 }
 
 async function loadNews(){
-  const list=document.getElementById("newsList");
-  list.innerHTML="";
+  const list = document.getElementById("newsList");
+  list.innerHTML = "Loading...";
 
-  const q=query(collection(db,"news"),orderBy("createdAt","desc"));
-  const snap=await getDocs(q);
+  try{
+    const q = query(collection(db, "news"), orderBy("createdAt", "desc"));
+    const snap = await getDocs(q);
 
-  if(snap.empty){
-    list.innerHTML="No news yet.";
-    return;
+    list.innerHTML = "";
+
+    if(snap.empty){
+      list.innerHTML = "<p>No news yet.</p>";
+      return;
+    }
+
+    snap.forEach(docSnap => {
+      const n = docSnap.data();
+
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = `<h3>${n.title}</h3><p>${n.text}</p>`;
+      list.appendChild(div);
+    });
+
+  }catch(error){
+    console.error(error);
+    list.innerHTML = "Error loading news: " + error.message;
   }
-
-  snap.forEach(doc=>{
-    const n=doc.data();
-    list.innerHTML+=`<div class="card"><h3>${n.title}</h3><p>${n.text}</p></div>`;
-  });
 }
 
 loadEditions();
