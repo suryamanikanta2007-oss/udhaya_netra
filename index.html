@@ -91,10 +91,10 @@ footer{text-align:center;background:linear-gradient(135deg,#111,#3b0000);color:w
   <h2>Digital E-Paper</h2>
   <div id="editionList">Loading...</div>
 
-  <div id="pdfBox" class="pdf-viewer" style="display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;">
-    <div>
-      <h3>Select an E-Paper</h3>
-      <p>Click <b>Open E-Paper</b> to view the PDF in a new tab.</p>
+  <div id="pdfBox" class="pdf-viewer">
+    <div style="padding:30px;text-align:center">
+      <h3>Today's E-Paper</h3>
+      <p>Select an edition and it will open below inside the website.</p>
     </div>
   </div>
 </section>
@@ -291,7 +291,25 @@ window.openPDF = function(url){
     return;
   }
 
-  window.open(cleanUrl, "_blank", "noopener,noreferrer");
+  const pdfBox = document.getElementById("pdfBox");
+
+  pdfBox.innerHTML = `
+    <iframe
+      src="${cleanUrl}"
+      width="100%"
+      height="900"
+      style="border:none;border-radius:14px;background:white;">
+    </iframe>
+  `;
+
+  showPage("epaper");
+
+  setTimeout(() => {
+    pdfBox.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }, 100);
 };
 
 window.editPDF = async function(id, oldTitle, oldDate, oldUrl){
