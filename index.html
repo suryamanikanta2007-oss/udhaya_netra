@@ -7,136 +7,253 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
-html{scroll-behavior:smooth}
-body{background:#f6f9ff;color:#263238}
-
-.top-header{
-  width:94%;max-width:1180px;margin:14px auto;background:#fff;border-radius:18px;
-  padding:22px 28px;display:flex;justify-content:space-between;align-items:center;
-  gap:20px;box-shadow:0 8px 25px #0001
-}
-.brand-box{display:flex;align-items:center;gap:18px}
-.brand-logo-text{
-  width:90px;height:90px;border-radius:50%;
-  background:linear-gradient(135deg,#ff9f43,#ff4d4d);
-  display:flex;align-items:center;justify-content:center;
-  font-size:50px;color:white;box-shadow:0 8px 20px #0002
-}
-.logo{font-family:Georgia,serif;font-size:42px;font-weight:900;letter-spacing:3px;color:#a40000}
-.telugu{font-size:22px;font-weight:900;color:#d35400}
-.header-contact p{font-size:15px;margin:6px 0}
-.socials{display:flex;gap:10px;margin-top:8px}
-.socials span{
-  width:34px;height:34px;border-radius:50%;background:#0d6efd;color:white;
-  display:flex;align-items:center;justify-content:center;font-weight:900
-}
-
-nav{
-  width:94%;max-width:1180px;margin:0 auto 20px;background:#fff;border-radius:16px;
-  display:flex;justify-content:space-around;gap:10px;flex-wrap:wrap;padding:12px;
-  box-shadow:0 8px 25px #0001;position:sticky;top:0;z-index:10
-}
-nav a{color:#222;text-decoration:none;font-weight:800;padding:12px 22px;border-radius:12px;cursor:pointer}
-nav a:hover{background:#fff1f1;color:#d60000}
-
-.breaking{
-  width:94%;max-width:1180px;margin:0 auto 20px;background:#fff;border-radius:14px;
-  padding:12px;box-shadow:0 6px 20px #0001;color:#333;font-weight:700
-}
-.breaking b{background:#e60023;color:white;padding:12px 20px;border-radius:12px;margin-right:18px}
-
+body{background:#f7fbff;color:#1f2937}
 .container{width:94%;max-width:1180px;margin:auto}
-.section{display:none;animation:fade .3s ease}
-.section.active{display:block}
-@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
+/* HEADER */
+.header{
+  background:white;
+  padding:22px 0;
+}
+.header-inner{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+.logo-icon{
+  width:125px;
+  height:90px;
+}
+.logo-main{
+  font-family:Georgia,serif;
+  font-size:42px;
+  font-weight:900;
+  color:#9b0000;
+  letter-spacing:2px;
+}
+.logo-telugu{
+  color:#c75b12;
+  font-size:23px;
+  font-weight:900;
+}
+.tagline{color:#667085;font-size:17px}
+.header-contact p{margin:8px 0;color:#344054}
+.socials{display:flex;gap:12px;margin-top:10px}
+.socials span{
+  width:36px;height:36px;border-radius:50%;
+  background:#0d6efd;color:white;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;
+}
+
+/* NAV */
+nav{
+  background:white;
+  border-radius:14px;
+  box-shadow:0 8px 25px #0001;
+  margin:12px auto 22px;
+  padding:14px;
+  display:flex;
+  justify-content:space-around;
+  flex-wrap:wrap;
+  gap:10px;
+}
+nav a{
+  text-decoration:none;
+  color:#1f2937;
+  font-weight:800;
+  padding:14px 30px;
+  border-radius:10px;
+  cursor:pointer;
+}
+nav a:hover,nav a.active{
+  color:#d71920;
+  border-bottom:4px solid #d71920;
+}
+
+/* BREAKING */
+.breaking{
+  background:white;
+  border-radius:14px;
+  box-shadow:0 8px 25px #0001;
+  padding:12px;
+  margin-bottom:24px;
+  display:flex;
+  align-items:center;
+  gap:28px;
+  flex-wrap:wrap;
+}
+.breaking-title{
+  background:linear-gradient(135deg,#d71920,#ff3b30);
+  color:white;
+  padding:14px 28px;
+  border-radius:14px;
+  font-weight:900;
+}
+.dot{width:10px;height:10px;background:#f59e0b;border-radius:50%}
+
+/* SECTIONS */
+.section{display:none}
+.section.active{display:block}
+
+/* HERO */
 .hero{
   background:linear-gradient(135deg,#fff1f1,#fff7f7);
-  border:1px solid #ffd6d6;border-radius:18px;padding:46px;
-  display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:22px
+  border:1px solid #ffd6d6;
+  border-radius:20px;
+  padding:46px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:25px;
+  margin-bottom:24px;
 }
-.hero h1{font-size:54px;color:#d61900;margin:10px 0}
-.hero p{font-size:18px;color:#555}
-.hero img{width:340px;max-width:100%;border-radius:18px}
+.hero h1{
+  font-size:58px;
+  color:#d71920;
+  margin:10px 0;
+}
+.hero p{font-size:18px;color:#475467}
+.hero-img{
+  width:430px;
+  max-width:100%;
+  background:white;
+  border-radius:22px;
+  padding:22px;
+  box-shadow:0 10px 30px #0001;
+  text-align:center;
+}
+.paper{font-size:120px}
 .btn{
-  display:inline-block;background:linear-gradient(135deg,#ff512f,#dd2476);color:white;
-  padding:14px 22px;border-radius:10px;text-decoration:none;font-weight:900;margin:20px 10px 0 0;
-  border:none;cursor:pointer
+  display:inline-block;
+  margin:25px 10px 0 0;
+  padding:15px 26px;
+  background:linear-gradient(135deg,#ff512f,#dd2476);
+  color:white;
+  border-radius:12px;
+  font-weight:900;
+  text-decoration:none;
+  cursor:pointer;
+  border:none;
 }
+.btn.white{background:white;color:#1f2937;border:1px solid #ddd}
 
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+/* CARDS */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
 .card{
-  background:#fff;border-radius:16px;padding:22px;box-shadow:0 8px 25px #0001;
-  border:1px solid #eef1f6;margin-bottom:18px
+  background:white;
+  border-radius:18px;
+  padding:24px;
+  box-shadow:0 8px 25px #0001;
+  margin-bottom:22px;
 }
-.card h2,.card h3{color:#0d56b3;margin-bottom:14px}
-.card p{line-height:1.6;color:#555}
-.profile{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
-.profile img{
-  width:145px;height:145px;border-radius:50%;object-fit:cover;border:6px solid #eaf6ff;
-  box-shadow:0 8px 20px #0002
-}
+.card h2,.card h3{color:#0d56b3;margin-bottom:16px}
+.card p{line-height:1.7;color:#475467}
 .quick a{
-  display:block;text-decoration:none;font-weight:800;padding:16px;margin:12px 0;border-radius:12px;cursor:pointer
+  display:block;
+  padding:16px;
+  margin:12px 0;
+  border-radius:12px;
+  text-decoration:none;
+  font-weight:800;
+  cursor:pointer;
 }
-.q1{background:#ffe9ef;color:#d60023}.q2{background:#eaf4ff;color:#0057b8}
-.q3{background:#e9fff2;color:#008442}.q4{background:#f5eaff;color:#7b1fd1}
+.q1{background:#ffe9ef;color:#d60023}
+.q2{background:#eaf4ff;color:#0057b8}
+.q3{background:#e9fff2;color:#008442}
+.q4{background:#f5eaff;color:#7b1fd1}
+
+.profile{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.profile img{
+  width:145px;height:145px;border-radius:50%;
+  object-fit:cover;border:6px solid #eaf6ff;
+}
 
 input,textarea,button{
-  width:100%;padding:14px;margin:9px 0;border-radius:10px;font-size:15px
+  width:100%;
+  padding:14px;
+  margin:9px 0;
+  border-radius:10px;
+  font-size:15px;
 }
-input,textarea{border:1px solid #ddd;outline:none}
+input,textarea{border:1px solid #ddd}
 textarea{min-height:100px}
 button{background:#0d6efd;color:white;border:none;font-weight:900;cursor:pointer}
 .small-btn{width:auto;padding:10px 15px;margin-right:8px}
 .delete-btn{background:#222}
-
 .status{text-align:center;color:#b30000;font-weight:800}
-footer{text-align:center;padding:22px;margin-top:30px;background:#eef7ff;color:#555}
+
+footer{
+  text-align:center;
+  padding:22px;
+  margin-top:30px;
+  background:#eef7ff;
+  color:#555;
+}
 
 @media(max-width:850px){
-  .top-header,.hero{flex-direction:column;text-align:center}
-  .brand-box{flex-direction:column}
+  .header-inner,.hero{flex-direction:column;text-align:center}
+  .brand{flex-direction:column}
   .grid{grid-template-columns:1fr}
-  .hero h1{font-size:36px}
-  .logo{font-size:30px}
+  .hero h1{font-size:38px}
+  .logo-main{font-size:32px}
+  nav a{padding:12px 16px}
 }
 </style>
 </head>
 
 <body>
 
-<header class="top-header">
-  <div class="brand-box">
-    <div class="brand-logo-text">📰</div>
-    <div>
-      <div class="logo">UDHAYA NETRAM</div>
-      <div class="telugu">ఉదయ నేత్రం</div>
-      <p>Daily Telugu E-Paper</p>
-    </div>
-  </div>
+<header class="header">
+  <div class="container header-inner">
+    <div class="brand">
+      
+        <defs>
+          <linearGradient id="sun" x1="0" x2="1">
+            <stop stop-color="#ffc107"/>
+            <stop offset="1" stop-color="#ff4d00"/>
+          </linearGradient>
+        </defs>
+      </svg>
 
-  <div class="header-contact">
-    <p>📞 9848556806</p>
-    <p>✉️ admin@udhayanetram.com</p>
-    <div class="socials"><span>f</span><span>X</span><span>W</span><span>▶</span></div>
+      <div>
+        <div class="logo-main">UDHAYA NETRAM</div>
+        <div class="logo-telugu">ఉదయ నేత్రం</div>
+        <div class="tagline">Daily Telugu E-Paper</div>
+      </div>
+    </div>
+
+    <div class="header-contact">
+      <p>📞 9848556806</p>
+      <p>✉️ admin@udhayanetram.com</p>
+      <div class="socials"><span>f</span><span>X</span><span>W</span><span>▶</span></div>
+    </div>
   </div>
 </header>
 
+<div class="container">
 <nav>
-  <a onclick="showPage('home')">🏠 Home</a>
-  <a onclick="showPage('latest')">📰 Latest News</a>
-  <a onclick="showPage('epaper')">📄 E-Paper</a>
-  <a onclick="showPage('contact')">📞 Contact</a>
-  <a onclick="showPage('admin')">⚙️ Admin</a>
+  <a onclick="showPage('home')" class="nav-link active">🏠 Home</a>
+  <a onclick="showPage('latest')" class="nav-link">📰 Latest News</a>
+  <a onclick="showPage('epaper')" class="nav-link">📄 E-Paper</a>
+  <a onclick="showPage('contact')" class="nav-link">📞 Contact</a>
+  <a onclick="showPage('admin')" class="nav-link">⚙️ Admin</a>
 </nav>
 
 <div class="breaking">
-  <b>BREAKING NEWS ⚡</b>
-  Welcome to Udhaya Netram Daily Telugu E-Paper
+  <div class="breaking-title">BREAKING NEWS ⚡</div>
+  <b>Welcome to Udhaya Netram Daily Telugu E-Paper</b>
+  <div class="dot"></div>
+  <span>Stay Updated with the Latest News</span>
+  <div class="dot"></div>
+  <span>Truth | Trust | Telugu</span>
 </div>
-
-<div class="container">
 
 <section id="home" class="section active">
   <div class="hero">
@@ -144,10 +261,14 @@ footer{text-align:center;padding:22px;margin-top:30px;background:#eef7ff;color:#
       <h3>Welcome to</h3>
       <h1>Udhaya Netram</h1>
       <p>District, State and National Telugu news daily.</p>
-      <a class="btn" onclick="showPage('latest')">Read Latest News</a>
-      <a class="btn" onclick="showPage('epaper')">Read E-Paper</a>
+      <a class="btn" onclick="showPage('latest')">📰 Read Latest News</a>
+      <a class="btn white" onclick="showPage('epaper')">📄 Read E-Paper</a>
     </div>
-    <img src="https://raw.githubusercontent.com/suryamanikanta2007-oss/udhaya_netra/main/WhatsApp%20Image%202026-06-23%20at%202.22.01%20PM.jpeg">
+    <div class="hero-img">
+      <div class="paper"></div>
+      <h2>ఉదయ నేత్రం</h2>
+      <p>Daily News Edition</p>
+    </div>
   </div>
 
   <div class="grid">
@@ -234,7 +355,7 @@ footer{text-align:center;padding:22px;margin-top:30px;background:#eef7ff;color:#
       <h3>Add Daily PDF Link</h3>
       <input type="text" id="pdfTitle" placeholder="PDF Title">
       <input type="date" id="pdfDate">
-      <input type="url" id="pdfUrl" placeholder="Paste PDF URL">
+      <input type="url" id="pdfUrl" placeholder="Paste GitHub PDF link">
       <button onclick="uploadPDF()">Save PDF Link</button>
 
       <h3>Add Latest News</h3>
@@ -247,12 +368,9 @@ footer{text-align:center;padding:22px;margin-top:30px;background:#eef7ff;color:#
     <p id="statusMsg" class="status"></p>
   </div>
 </section>
-
 </div>
 
-<footer>
-  © 2026 Udhaya Netram Daily Newspaper. All rights reserved.
-</footer>
+<footer>© 2026 Udhaya Netram Daily Newspaper. All rights reserved.</footer>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -284,6 +402,9 @@ function status(msg){document.getElementById("statusMsg").innerText=msg}
 window.showPage=function(id){
   document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
+
+  document.querySelectorAll(".nav-link").forEach(a=>a.classList.remove("active"));
+  event.target.classList.add("active");
 };
 
 onAuthStateChanged(auth, async user=>{
@@ -349,20 +470,19 @@ window.addNews=async function(){
   }catch(e){status("News add failed: "+e.message)}
 };
 
-window.openPDF = function(url){
-  let finalUrl = url.trim();
+window.openPDF=function(url){
+  let finalUrl=url.trim();
 
   if(finalUrl.includes("github.com") && finalUrl.includes("/blob/")){
-    finalUrl = finalUrl
-      .replace("https://github.com/", "https://raw.githack.com/")
-      .replace("/blob/", "/");
+    finalUrl=finalUrl
+      .replace("https://github.com/","https://raw.githubusercontent.com/")
+      .replace("/blob/","/");
   }
 
-  window.open(
-    "https://docs.google.com/gview?embedded=true&url=" + encodeURIComponent(finalUrl),
-    "_blank"
-  );
+  const viewer="https://docs.google.com/gview?embedded=true&url="+encodeURIComponent(finalUrl);
+  window.open(viewer,"_blank");
 };
+
 window.editPDF=async function(id,title,date,url){
   if(!auth.currentUser)return alert("Admin only");
   const nt=prompt("Edit PDF title",title);
