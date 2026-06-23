@@ -171,7 +171,9 @@ const auth = getAuth(app);
 
 let isAdmin = false;
 
-function status(msg){ document.getElementById("statusMsg").innerText = msg; }
+function status(msg){
+  document.getElementById("statusMsg").innerText = msg;
+}
 
 window.showPage = function(id){
   document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
@@ -191,10 +193,17 @@ window.loginAdmin = async function(){
   try{
     const email = document.getElementById("adminEmail").value.trim();
     const password = document.getElementById("adminPassword").value.trim();
-    if(!email || !password){ status("Enter email and password"); return; }
+
+    if(!email || !password){
+      status("Enter email and password");
+      return;
+    }
+
     await signInWithEmailAndPassword(auth, email, password);
     status("Login successful");
-  }catch(error){ status("Login failed: " + error.message); }
+  }catch(error){
+    status("Login failed: " + error.message);
+  }
 };
 
 window.logoutAdmin = async function(){
@@ -208,12 +217,26 @@ window.uploadPDF = async function(){
     const date = document.getElementById("pdfDate").value;
     const url = document.getElementById("pdfUrl").value.trim();
 
-    if(!auth.currentUser){ status("Please login first"); return; }
-    if(!title || !date || !url){ status("Fill PDF title, date and PDF link"); return; }
-    if(!url.startsWith("http")){ status("Paste valid PDF link"); return; }
+    if(!auth.currentUser){
+      status("Please login first");
+      return;
+    }
+
+    if(!title || !date || !url){
+      status("Fill PDF title, date and PDF link");
+      return;
+    }
+
+    if(!url.startsWith("http")){
+      status("Paste valid PDF link");
+      return;
+    }
 
     await addDoc(collection(db, "editions"), {
-      title, date, url, createdAt:serverTimestamp()
+      title:title,
+      date:date,
+      url:url,
+      createdAt:serverTimestamp()
     });
 
     document.getElementById("pdfTitle").value = "";
@@ -223,7 +246,9 @@ window.uploadPDF = async function(){
     status("PDF link saved successfully");
     await loadEditions();
     showPage("epaper");
-  }catch(error){ status("PDF save failed: " + error.message); }
+  }catch(error){
+    status("PDF save failed: " + error.message);
+  }
 };
 
 window.addNews = async function(){
@@ -231,11 +256,20 @@ window.addNews = async function(){
     const title = document.getElementById("newsTitle").value.trim();
     const text = document.getElementById("newsText").value.trim();
 
-    if(!auth.currentUser){ status("Please login first"); return; }
-    if(!title || !text){ status("Fill news title and details"); return; }
+    if(!auth.currentUser){
+      status("Please login first");
+      return;
+    }
+
+    if(!title || !text){
+      status("Fill news title and details");
+      return;
+    }
 
     await addDoc(collection(db, "news"), {
-      title, text, createdAt:serverTimestamp()
+      title:title,
+      text:text,
+      createdAt:serverTimestamp()
     });
 
     document.getElementById("newsTitle").value = "";
@@ -244,30 +278,52 @@ window.addNews = async function(){
     status("News added successfully");
     await loadNews();
     showPage("latest");
-  }catch(error){ status("News add failed: " + error.message); }
+  }catch(error){
+    status("News add failed: " + error.message);
+  }
 };
 
 window.openPDF = function(url){
-  window.open(url, "_blank");
+  const cleanUrl = String(url || "").trim();
+
+  if(!cleanUrl){
+    alert("PDF link not found");
+    return;
+  }
+
+  window.open(cleanUrl, "_blank", "noopener,noreferrer");
 };
 
 window.editPDF = async function(id, oldTitle, oldDate, oldUrl){
-  if(!auth.currentUser){ alert("Admin only"); return; }
+  if(!auth.currentUser){
+    alert("Admin only");
+    return;
+  }
 
   const title = prompt("Edit PDF title", oldTitle);
   if(title === null) return;
+
   const date = prompt("Edit PDF date", oldDate);
   if(date === null) return;
+
   const url = prompt("Edit PDF link", oldUrl);
   if(url === null) return;
 
-  await updateDoc(doc(db, "editions", id), { title, date, url });
+  await updateDoc(doc(db, "editions", id), {
+    title:title,
+    date:date,
+    url:url
+  });
+
   status("PDF updated");
   await loadEditions();
 };
 
 window.deletePDF = async function(id){
-  if(!auth.currentUser){ alert("Admin only"); return; }
+  if(!auth.currentUser){
+    alert("Admin only");
+    return;
+  }
 
   if(confirm("Delete this PDF?")){
     await deleteDoc(doc(db, "editions", id));
@@ -277,20 +333,31 @@ window.deletePDF = async function(id){
 };
 
 window.editNews = async function(id, oldTitle, oldText){
-  if(!auth.currentUser){ alert("Admin only"); return; }
+  if(!auth.currentUser){
+    alert("Admin only");
+    return;
+  }
 
   const title = prompt("Edit news title", oldTitle);
   if(title === null) return;
+
   const text = prompt("Edit news details", oldText);
   if(text === null) return;
 
-  await updateDoc(doc(db, "news", id), { title, text });
+  await updateDoc(doc(db, "news", id), {
+    title:title,
+    text:text
+  });
+
   status("News updated");
   await loadNews();
 };
 
 window.deleteNews = async function(id){
-  if(!auth.currentUser){ alert("Admin only"); return; }
+  if(!auth.currentUser){
+    alert("Admin only");
+    return;
+  }
 
   if(confirm("Delete this news?")){
     await deleteDoc(doc(db, "news", id));
@@ -322,16 +389,21 @@ async function loadEditions(){
 
     snap.forEach(docSnap => {
       const e = docSnap.data();
+
+      const title = e.title || "";
+      const date = e.date || "";
+      const url = e.url || "";
+
       const div = document.createElement("div");
       div.className = "card";
 
       div.innerHTML = `
-        <h3>${e.title || ""}</h3>
-        <p><small>${e.date || ""}</small></p>
-        <button type="button" onclick="openPDF('${e.url}')">Open E-Paper</button>
+        <h3>${escapeHTML(title)}</h3>
+        <p><small>${escapeHTML(date)}</small></p>
+        <button type="button" onclick='openPDF(${JSON.stringify(url)})'>Open E-Paper</button>
         ${isAdmin ? `
-          <button class="small-btn" type="button" onclick="editPDF('${docSnap.id}','${escapeText(e.title)}','${escapeText(e.date)}','${escapeText(e.url)}')">Edit PDF</button>
-          <button class="small-btn delete-btn" type="button" onclick="deletePDF('${docSnap.id}')">Delete PDF</button>
+          <button class="small-btn" type="button" onclick='editPDF(${JSON.stringify(docSnap.id)}, ${JSON.stringify(title)}, ${JSON.stringify(date)}, ${JSON.stringify(url)})'>Edit PDF</button>
+          <button class="small-btn delete-btn" type="button" onclick='deletePDF(${JSON.stringify(docSnap.id)})'>Delete PDF</button>
         ` : ""}
       `;
 
@@ -341,12 +413,12 @@ async function loadEditions(){
         home.innerHTML = `
           <div class="card">
             <h3>Today's E-Paper</h3>
-            <p>${e.title || ""}</p>
-            <p><small>${e.date || ""}</small></p>
-            <button type="button" onclick="openPDF('${e.url}')">Open E-Paper</button>
+            <p>${escapeHTML(title)}</p>
+            <p><small>${escapeHTML(date)}</small></p>
+            <button type="button" onclick='openPDF(${JSON.stringify(url)})'>Open E-Paper</button>
             ${isAdmin ? `
-              <button class="small-btn" type="button" onclick="editPDF('${docSnap.id}','${escapeText(e.title)}','${escapeText(e.date)}','${escapeText(e.url)}')">Edit PDF</button>
-              <button class="small-btn delete-btn" type="button" onclick="deletePDF('${docSnap.id}')">Delete PDF</button>
+              <button class="small-btn" type="button" onclick='editPDF(${JSON.stringify(docSnap.id)}, ${JSON.stringify(title)}, ${JSON.stringify(date)}, ${JSON.stringify(url)})'>Edit PDF</button>
+              <button class="small-btn delete-btn" type="button" onclick='deletePDF(${JSON.stringify(docSnap.id)})'>Delete PDF</button>
             ` : ""}
           </div>
         `;
@@ -355,7 +427,7 @@ async function loadEditions(){
     });
 
   }catch(error){
-    list.innerHTML = "<p>Error loading PDFs: " + error.message + "</p>";
+    list.innerHTML = "<p>Error loading PDFs: " + escapeHTML(error.message) + "</p>";
     home.innerHTML = "<p>Error loading latest PDF.</p>";
   }
 }
@@ -377,15 +449,19 @@ async function loadNews(){
 
     snap.forEach(docSnap => {
       const n = docSnap.data();
+
+      const title = n.title || "";
+      const text = n.text || "";
+
       const div = document.createElement("div");
       div.className = "card";
 
       div.innerHTML = `
-        <h3>${n.title || ""}</h3>
-        <p>${n.text || ""}</p>
+        <h3>${escapeHTML(title)}</h3>
+        <p>${escapeHTML(text)}</p>
         ${isAdmin ? `
-          <button class="small-btn" type="button" onclick="editNews('${docSnap.id}','${escapeText(n.title)}','${escapeText(n.text)}')">Edit News</button>
-          <button class="small-btn delete-btn" type="button" onclick="deleteNews('${docSnap.id}')">Delete News</button>
+          <button class="small-btn" type="button" onclick='editNews(${JSON.stringify(docSnap.id)}, ${JSON.stringify(title)}, ${JSON.stringify(text)})'>Edit News</button>
+          <button class="small-btn delete-btn" type="button" onclick='deleteNews(${JSON.stringify(docSnap.id)})'>Delete News</button>
         ` : ""}
       `;
 
@@ -393,16 +469,17 @@ async function loadNews(){
     });
 
   }catch(error){
-    list.innerHTML = "Error loading news: " + error.message;
+    list.innerHTML = "Error loading news: " + escapeHTML(error.message);
   }
 }
 
-function escapeText(text){
+function escapeHTML(text){
   return String(text || "")
-    .replace(/\\/g, "\\\\")
-    .replace(/'/g, "\\'")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
-    .replace(/\n/g, "\\n");
+    .replace(/'/g, "&#039;");
 }
 
 loadEditions();
