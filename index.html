@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Udhaya Netram | ఉదయ నేత్రం - Daily Telugu E-Paper & News Portal</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="ఉదయ నేత్రం (Udhaya Netram) Daily Telugu E-Paper & Latest News from Amalapuram, Konaseema, Andhra Pradesh. Editor & Publisher: Kadali Pallaparaju.">
+  <meta name="keywords" content="Udhaya Netram, ఉదయ నేత్రం, Telugu E-Paper, Amalapuram news, Konaseema news, Daily newspaper, Kadali Pallaparaju, Andhra Pradesh news">
+  <meta name="author" content="Kadali Pallaparaju">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Udhaya Netram | ఉదయ నేత్రం - Daily Telugu E-Paper">
+  <meta property="og:description" content="Truth | Trust | Telugu - Daily Digital Edition from Amalapuram, Konaseema.">
+  <meta property="og:type" content="website">
+  
+  <!-- Favicon SVG -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%239b0000'/><path d='M20 50 Q50 20 80 50 Q50 80 20 50 Z' fill='%23ffffff'/><circle cx='50' cy='50' r='14' fill='%23f59e0b'/><circle cx='50' cy='50' r='7' fill='%239b0000'/></svg>">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <div class="topbar-left">
+        <span class="topbar-edition-badge">📰 డిజిటల్ దినపత్రిక</span>
+        <span class="topbar-weather">⛅ అమలాపురం: <b>31°C</b> | తేమ: 68%</span>
+        <span class="topbar-date" id="liveDate">📅 తేదీ లోడ్ అవుతోంది...</span>
+      </div>
+      <div class="topbar-right">
+        <!-- Font Size Adjuster -->
+        <div class="font-resizer" title="Font Size">
+          <button class="font-btn" onclick="adjustFontSize(-1)">A-</button>
+          <button class="font-btn" onclick="adjustFontSize(0)">A</button>
+          <button class="font-btn" onclick="adjustFontSize(1)">A+</button>
+        </div>
+        <!-- Dark Mode Toggle -->
+        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark/Light mode">
+          <span id="themeIcon">🌙</span> <span id="themeText">డార్క్ మోడ్</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER / MASTHEAD -->
+  <header class="header">
+    <div class="container">
+      <div class="masthead-motto">
+        ధర్మో రక్షతి రక్షితః • సత్యమేవ జయతే • ప్రజల పక్షాన నిలిచే నిష్పక్షపాత తెలుగు దినపత్రిక
+      </div>
+      <div class="header-inner">
+        <a href="#" onclick="showPage('home')" class="brand" title="Udhaya Netram Home">
+          <!-- Sun & Eye Custom SVG Logo -->
+          <svg class="logo-symbol" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fbbf24"/>
+                <stop offset="50%" stop-color="#f59e0b"/>
+                <stop offset="100%" stop-color="#ea580c"/>
+              </linearGradient>
+              <linearGradient id="eyeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#800000"/>
+                <stop offset="100%" stop-color="#dc2626"/>
+              </linearGradient>
+              <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="3" result="blur"/>
+                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+              </filter>
+            </defs>
+            <!-- Sun Rays -->
+            <g stroke="url(#sunGrad)" stroke-width="3.5" stroke-linecap="round" opacity="0.9">
+              <line x1="50" y1="8" x2="50" y2="18" />
+              <line x1="20" y1="20" x2="27" y2="27" />
+              <line x1="8" y1="50" x2="18" y2="50" />
+              <line x1="80" y1="20" x2="73" y2="27" />
+              <line x1="92" y1="50" x2="82" y2="50" />
+              <line x1="20" y1="80" x2="27" y2="73" />
+              <line x1="80" y1="80" x2="73" y2="73" />
+              <line x1="50" y1="92" x2="50" y2="82" />
+            </g>
+            <!-- Rising Sun Base Circle -->
+            <circle cx="50" cy="50" r="32" fill="url(#sunGrad)" filter="url(#glow)" />
+            <!-- Eye Almond Shape Outline -->
+            <path d="M16 50 Q50 18 84 50 Q50 82 16 50 Z" fill="#ffffff" stroke="#660000" stroke-width="2.5"/>
+            <!-- Pupil Iris Ring -->
+            <circle cx="50" cy="50" r="16" fill="url(#eyeGrad)" />
+            <circle cx="50" cy="50" r="7" fill="#ffffff" />
+            <circle cx="53" cy="47" r="2.5" fill="#f59e0b" />
+          </svg>
+
+          <div class="brand-text">
+            <div class="logo-main">UDHAYA NETRAM</div>
+            <div class="logo-telugu">ఉదయ నేత్రం</div>
+            <div class="tagline">Daily Telugu E-Paper • సత్యం • విశ్వాసం • వార్తలు</div>
+          </div>
+        </a>
+
+        <div class="header-right">
+          <div class="header-edition-info">
+            <span class="district-pill">📍 అమలాపురం / కోనసీమ ప్రధాన సంచిక</span>
+          </div>
+          <div class="socials">
+            <a href="https://facebook.com" target="_blank" class="social-btn fb" title="Facebook">f</a>
+            <a href="https://twitter.com" target="_blank" class="social-btn x" title="X (Twitter)">𝕏</a>
+            <a href="https://wa.me/919848556806?text=Hi%20Udhaya%20Netram" target="_blank" class="social-btn wa" title="WhatsApp">W</a>
+            <a href="https://t.me" target="_blank" class="social-btn tg" title="Telegram">✈</a>
+            <a href="https://youtube.com" target="_blank" class="social-btn yt" title="YouTube">▶</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- NAVIGATION BAR -->
+    <div class="nav-wrapper">
+      <button class="mobile-menu-toggle" id="menuToggle" onclick="toggleMobileNav()" aria-label="Toggle navigation menu">
+        ☰
+      </button>
+
+      <nav id="mainNav">
+        <a onclick="showPage('home')" class="nav-link active" id="nav-home">
+          <span>🏠</span> హోమ్ (Home)
+        </a>
+        <a onclick="showPage('latest')" class="nav-link" id="nav-latest">
+          <span>📰</span> తాజా వార్తలు (Latest News)
+        </a>
+        <a onclick="showPage('epaper')" class="nav-link" id="nav-epaper">
+          <span>📄</span> ఈ-పేపర్ (E-Paper)
+        </a>
+        <a onclick="showPage('classifieds')" class="nav-link" id="nav-classifieds">
+          <span>📢</span> ప్రకటనలు (Ads)
+        </a>
+        <a onclick="showPage('contact')" class="nav-link" id="nav-contact">
+          <span>📞</span> సంప్రదించండి (Contact)
+        </a>
+      </nav>
+
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div class="nav-search">
+          <span>🔍</span>
+          <input type="text" id="globalSearchInput" placeholder="వార్తలు వెతకండి (Search)..." oninput="handleSearch(this.value)">
+        </div>
+
+        <!-- Three-Dots Menu for Admin Cabin & More -->
+        <div class="more-menu-container" id="moreMenuContainer">
+          <button class="more-menu-btn" onclick="toggleMoreMenu(event)" title="మరిన్ని ఆప్షన్లు (More Options)" aria-label="More Options">
+            ⋮
+          </button>
+          <div class="more-dropdown" id="moreDropdown">
+            <div class="dropdown-header">మరిన్ని వివరాలు (Menu)</div>
+            <a onclick="showPage('classifieds'); toggleMoreMenu();" class="dropdown-item">
+              <span>📢</span> ప్రకటనల రేట్లు (Ad Rates)
+            </a>
+            <a onclick="showPage('contact'); toggleMoreMenu();" class="dropdown-item">
+              <span>📍</span> కార్యాలయం (Office Location)
+            </a>
+            <a onclick="contactWhatsApp(); toggleMoreMenu();" class="dropdown-item">
+              <span>💬</span> సంపాదక హెల్ప్‌లైన్ (WhatsApp)
+            </a>
+            <a onclick="openAdminCabin()" class="dropdown-item admin-item">
+              <span>🔐</span> <b>అడ్మిన్ క్యాబిన్ (Admin Cabin)</b>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BREAKING NEWS TICKER -->
+    <div class="breaking-container">
+      <div class="breaking-label">
+        <div class="breaking-pulse"></div>
+        <span>బ్రేకింగ్ న్యూస్</span>
+      </div>
+      <div class="ticker-wrap">
+        <div class="ticker-content" id="breakingTicker">
+          <span class="ticker-item" onclick="showPage('latest')">⚡ ఉదయ నేత్రం డైలీ తెలుగు ఈ-పేపర్‌కు స్వాగతం!</span>
+          <span class="ticker-dot"></span>
+          <span class="ticker-item" onclick="showPage('epaper')">📰 కోనసీమ, అమలాపురం మరియు ఆంధ్రప్రదేశ్ తాజా వార్తలు ప్రతిరోజూ ఉదయం మీ చేతుల్లో!</span>
+          <span class="ticker-dot"></span>
+          <span class="ticker-item" onclick="showPage('latest')">✨ సత్యం, ధైర్యం, నిష్పక్షపాత వార్తలకు చిరునామా ఉదయ నేత్రం!</span>
+          <span class="ticker-dot"></span>
+          <span class="ticker-item" onclick="showPage('classifieds')">📞 ప్రకటనలు & వార్తలకు సంప్రదించండి: 9848556806</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         HOME SECTION (LEAD STORY + SPOTLIGHT)
+         ========================================== -->
+    <section id="home" class="section active">
+      <!-- Main Lead Banner -->
+      <div class="lead-story-section">
+        <!-- Lead Main Article Card -->
+        <div class="lead-card" id="homeLeadCard">
+          <div class="lead-image-wrap">
+            <img src="https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=1000&auto=format&fit=crop&q=80" alt="Lead News" class="lead-image" id="leadImg">
+            <span class="lead-badge" id="leadBadge">🔥 ముఖ్యాంశం • కోనసీమ</span>
+          </div>
+          <div class="lead-content">
+            <div class="lead-meta">
+              <span id="leadDate">📅 నేటి ప్రధాన వార్త</span>
+              <span>•</span>
+              <span>⏱️ 2 నిమిషాల చదువు</span>
+              <span>•</span>
+              <span style="color:var(--primary); font-weight:700;">✍️ సంపాదక విభాగం</span>
+            </div>
+            <h1 class="lead-title" id="leadTitle" onclick="openLeadArticle()">
+              అమలాపురంలో ఘనంగా ప్రారంభమైన ఉదయ నేత్రం దినపత్రిక సేవలు - ప్రజా సమస్యలపై ప్రత్యేక కథనాలు
+            </h1>
+            <p class="lead-excerpt" id="leadExcerpt">
+              డాక్టర్ బి.ఆర్. అంబేద్కర్ కోనసీమ జిల్లా కేంద్రం అమలాపురంలో ఉదయ నేత్రం తెలుగు డిజిటల్ దినపత్రిక నూతన ఎడిషన్ ఆవిష్కరణ కార్యక్రమం ఘనంగా జరిగింది. సంపాదకుడు కడలి పల్లపరాజు మాట్లాడుతూ ప్రజల సమస్యలు, అభివృద్ధి, వాస్తవాలను వెలుగులోకి తేవడమే పత్రిక ప్రధాన లక్ష్యమని పేర్కొన్నారు.
+            </p>
+            <div class="lead-footer">
+              <button class="btn" onclick="openLeadArticle()">
+                <span>పూర్తి కథనం చదవండి ➔</span>
+              </button>
+              <button class="btn btn-gold" onclick="shareArticle(document.getElementById('leadTitle').innerText, document.getElementById('leadExcerpt').innerText)">
+                <span>💬 వాట్సాప్‌లో షేర్</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar (E-Paper Spotlight + Headlines) -->
+        <div class="lead-sidebar">
+          <!-- Today's E-Paper Spotlight -->
+          <div class="epaper-spotlight">
+            <span style="font-size:12px; background:var(--primary); color:white; padding:3px 10px; border-radius:var(--radius-full); font-weight:800; text-transform:uppercase;">డిజిటల్ సంచిక</span>
+            <h3 class="epaper-spotlight-title" style="margin-top:10px;">ఉదయ నేత్రం నేటి ఈ-పేపర్</h3>
+            <p class="epaper-spotlight-sub" id="heroEditionDate">అమలాపురం & కోనసీమ సమగ్ర వార్తలు</p>
+            
+            <div class="spotlight-mockup">
+              <span style="font-size: 42px;">📰</span>
+              <div style="font-family:var(--font-telugu); font-weight:800; font-size:16px; margin:6px 0; color:var(--text-main);">నేటి పూర్తి పేపర్ సిద్ధంగా ఉంది</div>
+              <small style="color:var(--text-muted);">PDF రీడర్ • పేజ్ జూమ్ • డౌన్‌లోడ్ సదుపాయం</small>
+            </div>
+
+            <div style="display:flex; gap:10px;">
+              <button class="btn" style="flex:1;" onclick="openLatestPaper()">
+                <span>📖 చదవండి</span>
+              </button>
+              <button class="btn btn-outline" style="flex:1;" onclick="showPage('epaper')">
+                <span>సంచికలు ➔</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Top Headlines Quick Snapshot -->
+          <div class="card" style="margin-bottom:0;">
+            <div class="section-heading" style="font-size:18px; margin-bottom:12px;">ముఖ్య వార్తలు (Top News)</div>
+            <div id="homeNews">
+              <p>వార్తలు లోడ్ అవుతున్నాయి...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div class="category-bar">
+        <button class="cat-pill active" onclick="filterHomeCategory('All', this)">అన్ని వార్తలు (All)</button>
+        <button class="cat-pill" onclick="filterHomeCategory('Konaseema', this)">📍 కోనసీమ జిల్లా</button>
+        <button class="cat-pill" onclick="filterHomeCategory('AP', this)">🏛️ ఆంధ్రప్రదేశ్</button>
+        <button class="cat-pill" onclick="filterHomeCategory('National', this)">🇮🇳 జాతీయం & రాజకీయం</button>
+        <button class="cat-pill" onclick="filterHomeCategory('Agriculture', this)">🌾 వ్యవసాయం</button>
+        <button class="cat-pill" onclick="filterHomeCategory('Cinema', this)">🎬 సినిమా & వినోదం</button>
+      </div>
+
+      <!-- Dynamic News Cards Grid -->
+      <div class="news-grid" id="homeNewsGrid">
+        <!-- Rendered by app.js -->
+      </div>
+
+      <!-- Feature Row: Poll of the Day + Editorial -->
+      <div class="feature-row">
+        <!-- Interactive Poll of the Day -->
+        <div class="poll-card">
+          <div class="section-heading" style="font-size:18px; margin-bottom:12px;">📊 నేటి ప్రజాభిప్రాయ సేకరణ (Poll of the Day)</div>
+          <div class="poll-question" id="pollQuestion">
+            కోనసీమ జిల్లాలో కాలువల ఆధునీకరణ మరియు సాగునీటి నిర్వహణ పై మీ అభిప్రాయం ఏమిటి?
+          </div>
+          <div class="poll-options" id="pollOptions">
+            <button class="poll-option-btn" onclick="votePoll(0)">
+              <span>చాలా బాగుంది (Excellent)</span>
+              <span id="pollVote0">64%</span>
+            </button>
+            <button class="poll-option-btn" onclick="votePoll(1)">
+              <span>మరింత మెరుగుపడాలి (Needs Improvement)</span>
+              <span id="pollVote1">28%</span>
+            </button>
+            <button class="poll-option-btn" onclick="votePoll(2)">
+              <span>సంతృప్తికరంగా లేదు (Poor)</span>
+              <span id="pollVote2">8%</span>
+            </button>
+          </div>
+          <small id="pollStatus" style="color:var(--primary); font-weight:700; display:block; text-align:right;">మొత్తం ఓట్లు: 1,420 • ధన్యవాదాలు!</small>
+        </div>
+
+        <!-- Editor's Column / Editorial -->
+        <div class="editorial-card">
+          <div class="section-heading" style="font-size:18px; margin-bottom:12px;">✍️ సంపాదకీయం (Editor's Desk)</div>
+          <div class="editorial-quote">
+            "పత్రిక అనేది కేవలం వార్తలను అందించే సాధనం మాత్రమే కాదు, సమాజంలోని అన్యాయాలను ఎదిరించి, ప్రజా సమస్యలను ప్రభుత్వం దృష్టికి తీసుకెళ్లే చైతన్య నేత్రం. ఉదయ నేత్రం ఎల్లప్పుడూ సత్యం పక్షానే ఉంటుంది."
+          </div>
+          <div class="editorial-author">
+            <img src="https://raw.githubusercontent.com/suryamanikanta2007-oss/udhaya_netra/main/WhatsApp%20Image%202026-06-23%20at%202.22.01%20PM.jpeg" 
+                 alt="Kadali Pallaparaju" 
+                 class="editorial-avatar"
+                 onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=faces'">
+            <div>
+              <div style="font-weight:900; font-size:16px; color:var(--text-main); font-family:var(--font-telugu);">కడలి పల్లపరాజు</div>
+              <div style="font-size:12.5px; color:var(--primary); font-weight:700;">సంపాదకుడు & ప్రచురణకర్త • ఉదయ నేత్రం</div>
+            </div>
+            <button class="small-btn edit-btn" style="margin-left:auto;" onclick="contactWhatsApp()">
+              <span>💬 సంప్రదించండి</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         LATEST NEWS SECTION
+         ========================================== -->
+    <section id="latest" class="section">
+      <div class="section-header">
+        <h2 class="section-heading">తాజా వార్తలు (Latest News Feed)</h2>
+        <div class="news-filter-btns" style="display:flex; gap:6px; flex-wrap:wrap;">
+          <button class="small-btn edit-btn" onclick="filterCategory('All')">అన్నీ</button>
+          <button class="small-btn" style="background:var(--bg-subtle); color:var(--text-main);" onclick="filterCategory('Konaseema')">కోనసీమ</button>
+          <button class="small-btn" style="background:var(--bg-subtle); color:var(--text-main);" onclick="filterCategory('AP')">ఆంధ్రప్రదేశ్</button>
+          <button class="small-btn" style="background:var(--bg-subtle); color:var(--text-main);" onclick="filterCategory('National')">జాతీయం</button>
+          <button class="small-btn" style="background:var(--bg-subtle); color:var(--text-main);" onclick="filterCategory('Agriculture')">వ్యవసాయం</button>
+          <button class="small-btn" style="background:var(--bg-subtle); color:var(--text-main);" onclick="filterCategory('Cinema')">సినిమా</button>
+        </div>
+      </div>
+
+      <div class="news-grid" id="newsList">
+        <p>వార్తలు లోడ్ అవుతున్నాయి...</p>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         E-PAPER SECTION
+         ========================================== -->
+    <section id="epaper" class="section">
+      <div class="section-header">
+        <h2 class="section-heading">డిజిటల్ ఈ-పేపర్ సంచికలు (Digital E-Paper Archive)</h2>
+        <span style="font-size:13.5px; color:var(--text-muted); font-family:var(--font-telugu);">సంచికను ఎంచుకుని నేరుగా బ్రౌజర్‌లోనే చదవండి లేదా డౌన్‌లోడ్ చేసుకోండి</span>
+      </div>
+
+      <div class="epaper-grid" id="editionList">
+        <p>ఈ-పేపర్ సంచికలు లోడ్ అవుతున్నాయి...</p>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         CLASSIFIEDS & ADVERTISING BOOKING
+         ========================================== -->
+    <section id="classifieds" class="section">
+      <div class="section-header">
+        <h2 class="section-heading">ప్రకటనల బుకింగ్ & రేట్ కార్డ్ (Classifieds & Ads)</h2>
+      </div>
+
+      <div class="ad-calculator-card">
+        <h3 style="color:var(--primary); font-family:var(--font-telugu); font-size:20px; margin-bottom:8px;">📢 మీ వ్యాపారం & శుభకార్యాల ప్రకటనలు ఇవ్వండి</h3>
+        <p style="color:var(--text-muted); margin-bottom:20px; font-family:var(--font-telugu);">ఉదయ నేత్రం దినపత్రిక ద్వారా కోనసీమ మరియు గోదావరి జిల్లాల్లో లక్షలాది పాఠకులకు మీ సమాచారం చేరవేయండి.</p>
+
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:18px; margin-bottom:20px;">
+          <div style="background:var(--bg-card); padding:18px; border-radius:var(--radius-sm); border:1px solid var(--border-color); text-align:center;">
+            <div style="font-weight:900; font-size:16px; color:var(--text-main); font-family:var(--font-telugu);">క్లాసిఫైడ్స్ (చిన్న ప్రకటనలు)</div>
+            <div style="font-size:22px; font-weight:900; color:var(--primary); margin:8px 0;">₹250 <span style="font-size:13px; color:var(--text-muted);">/ రోజు</span></div>
+            <small style="color:var(--text-muted);">శుభాకాంక్షలు, ఉద్యోగాలు, నివాసాలు</small>
+          </div>
+
+          <div style="background:var(--bg-card); padding:18px; border-radius:var(--radius-sm); border:1px solid var(--border-color); text-align:center;">
+            <div style="font-weight:900; font-size:16px; color:var(--text-main); font-family:var(--font-telugu);">క్వార్టర్ పేజ్ (1/4 Page)</div>
+            <div style="font-size:22px; font-weight:900; color:var(--primary); margin:8px 0;">₹1,500 <span style="font-size:13px; color:var(--text-muted);">/ రోజు</span></div>
+            <small style="color:var(--text-muted);">వ్యాపార ప్రారంభోత్సవాలు, ఆఫర్లు</small>
+          </div>
+
+          <div style="background:var(--bg-card); padding:18px; border-radius:var(--radius-sm); border:1px solid var(--border-color); text-align:center;">
+            <div style="font-weight:900; font-size:16px; color:var(--text-main); font-family:var(--font-telugu);">హాఫ్ పేజ్ (1/2 Page)</div>
+            <div style="font-size:22px; font-weight:900; color:var(--primary); margin:8px 0;">₹2,800 <span style="font-size:13px; color:var(--text-muted);">/ రోజు</span></div>
+            <small style="color:var(--text-muted);">ప్రముఖ సంస్థలు & ప్రత్యేక ప్రకటనలు</small>
+          </div>
+
+          <div style="background:var(--bg-card); padding:18px; border-radius:var(--radius-sm); border:1px solid var(--border-color); text-align:center;">
+            <div style="font-weight:900; font-size:16px; color:var(--text-main); font-family:var(--font-telugu);">ఫుల్ పేజ్ (Full Page)</div>
+            <div style="font-size:22px; font-weight:900; color:var(--primary); margin:8px 0;">₹5,000 <span style="font-size:13px; color:var(--text-muted);">/ రోజు</span></div>
+            <small style="color:var(--text-muted);">మెగా ఈవెంట్లు, బ్రాండింగ్</small>
+          </div>
+        </div>
+
+        <div style="text-align:center;">
+          <a href="https://wa.me/919848556806?text=నమస్తే,%20ఉదయ%20నేత్రంలో%20ప్రకటన%20ఇవ్వాలనుకుంటున్నాను." target="_blank" class="btn btn-gold" style="padding:14px 32px;">
+            <span>💬 వాట్సాప్‌లో ప్రకటన బుక్ చేసుకోండి (9848556806)</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         CONTACT SECTION
+         ========================================== -->
+    <section id="contact" class="section">
+      <div class="section-header">
+        <h2 class="section-heading">సంప్రదించండి (Contact Us)</h2>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:24px; margin-bottom:30px;">
+        <div class="card" style="margin-bottom:0;">
+          <div class="section-heading" style="font-size:18px; margin-bottom:14px;">🏢 ప్రధాన కార్యాలయ చిరునామా</div>
+          
+          <div style="background:var(--bg-subtle); padding:20px; border-radius:var(--radius-sm); margin-bottom:18px; border:1px solid var(--border-color);">
+            <h4 style="font-size:17px; font-weight:900; color:var(--primary-dark); font-family:var(--font-telugu); margin-bottom:6px;">ఉదయ నేత్రం దినపత్రిక</h4>
+            <p><b>సంపాదకుడు & ప్రచురణకర్త:</b> కడలి పల్లపరాజు</p>
+            <p><b>కార్యాలయం:</b> రెడ్ బ్రిడ్జ్ సమీపంలో, అమలాపురం</p>
+            <p><b>జిల్లా:</b> డాక్టర్ బి.ఆర్. అంబేద్కర్ కోనసీమ జిల్లా, పిన్: 533201</p>
+            <p><b>ఫోన్:</b> <a href="tel:9848556806" style="color:var(--primary); font-weight:800; text-decoration:none;">9848556806</a></p>
+            <p><b>ఈమెయిల్:</b> <a href="mailto:admin@udhayanetram.com" style="color:var(--primary); font-weight:800; text-decoration:none;">admin@udhayanetram.com</a></p>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <a href="tel:9848556806" class="btn" style="flex:1;"><span>📞 నేరుగా కాల్ చేయండి</span></a>
+            <a href="https://wa.me/919848556806" target="_blank" class="btn btn-gold" style="flex:1;"><span>💬 వాట్సాప్ చాట్</span></a>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:0;">
+          <div class="section-heading" style="font-size:18px; margin-bottom:14px;">✉️ సందేశం పంపండి (Direct Query)</div>
+          <form onsubmit="handleContactSubmit(event)">
+            <div class="form-group">
+              <label for="cName">మీ పేరు (Your Name)</label>
+              <input type="text" id="cName" placeholder="మీ పేరు నమోదు చేయండి" required>
+            </div>
+            <div class="form-group">
+              <label for="cPhone">మొబైల్ నంబర్ (Phone Number)</label>
+              <input type="tel" id="cPhone" placeholder="మీ ఫోన్ నంబర్" required>
+            </div>
+            <div class="form-group">
+              <label for="cMessage">వార్త లేదా సందేశం (Message / Press Release / Ad Request)</label>
+              <textarea id="cMessage" placeholder="మీ సందేశం ఇక్కడ రాయండి..." required></textarea>
+            </div>
+            <button type="submit" class="btn" style="width:100%;">
+              <span>వాట్సాప్ ద్వారా పంపండి ➔</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         ADMIN SECTION (CMS & STATS)
+         ========================================== -->
+    <section id="admin" class="section">
+      <div class="admin-card">
+        <div class="section-header" style="border:none; padding-bottom:0; margin-bottom:16px;">
+          <h2 class="section-heading">అడ్మిన్ పోర్టల్ (Editor / Admin CMS)</h2>
+          <span id="adminBadge" style="display:none; background:#dcfce7; color:#166534; padding:4px 12px; border-radius:var(--radius-full); font-size:12px; font-weight:800;">లాగిన్ అయ్యారు ✓</span>
+        </div>
+
+        <!-- Login Box -->
+        <div id="loginBox">
+          <p style="margin-bottom:18px; color:var(--text-muted); font-family:var(--font-telugu);">సంపాదకులు / అడ్మిన్ లాగిన్ ద్వారా ఈ-పేపర్ పిడిఎఫ్ లింకులు మరియు తాజా వార్తలను సులభంగా ప్రచురించవచ్చు.</p>
+          <div class="form-group">
+            <label for="adminEmail">అడ్మిన్ ఈమెయిల్ (Admin Email)</label>
+            <input type="email" id="adminEmail" placeholder="admin@udhayanetram.com" autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="adminPassword">పాస్‌వర్డ్ (Password)</label>
+            <input type="password" id="adminPassword" placeholder="••••••••" autocomplete="current-password">
+          </div>
+          <button class="btn" onclick="loginAdmin()" style="width:100%;">లాగిన్ చేయండి (Login)</button>
+        </div>
+
+        <!-- Admin Control Panel (Comprehensive Daily Publishing CMS) -->
+        <div id="adminPanel" style="display:none">
+          <!-- Stats Grid -->
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-number" id="statEditions">1</div>
+              <div class="stat-label">ఈ-పేపర్ సంచికలు</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number" id="statNews">3</div>
+              <div class="stat-label">ప్రచురించిన వార్తలు</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number" id="statBreaking">4</div>
+              <div class="stat-label">బ్రేకింగ్ వార్తలు</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number" style="color:#16a34a;">Live ✓</div>
+              <div class="stat-label">పోర్టల్ స్టేటస్</div>
+            </div>
+          </div>
+
+          <!-- CMS Tabs Navigation -->
+          <div class="admin-tabs" style="overflow-x:auto;">
+            <button class="admin-tab-btn active" id="tabEpaperBtn" onclick="switchAdminTab('epaperTab')">📄 1. ఈ-పేపర్ పబ్లిషర్</button>
+            <button class="admin-tab-btn" id="tabNewsBtn" onclick="switchAdminTab('newsTab')">📰 2. వార్తా ప్రచురణ</button>
+            <button class="admin-tab-btn" id="tabTickerBtn" onclick="switchAdminTab('tickerTab')">⚡ 3. బ్రేకింగ్ న్యూస్</button>
+            <button class="admin-tab-btn" id="tabPollBtn" onclick="switchAdminTab('pollTab')">📊 4. పోల్ & సంపాదకీయం</button>
+            <button class="admin-tab-btn" id="tabManageBtn" onclick="switchAdminTab('manageTab')">🗂️ 5. కంటెంట్ మేనేజర్</button>
+            <button class="small-btn delete-btn" style="margin-left:auto; font-size:13px;" onclick="logoutAdmin()">లాగౌట్</button>
+          </div>
+
+          <!-- TAB 1: E-Paper Publisher (Direct PDF File Upload) -->
+          <div id="epaperTab" class="admin-subtab">
+            <h3 style="margin-bottom:14px; color:var(--primary); font-family:var(--font-telugu);">📄 నేటి డిజిటల్ ఈ-పేపర్ ప్రచురణ (Direct PDF Upload)</h3>
+            
+            <div class="form-group">
+              <label for="pdfTitle">ఈ-పేపర్ శీర్షిక (Edition Title)</label>
+              <input type="text" id="pdfTitle" placeholder="ఉదా: ఉదయ నేత్రం - అమలాపురం & కోనసీమ ప్రధాన సంచిక">
+            </div>
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+              <div class="form-group">
+                <label for="pdfDate">ప్రచురణ తేదీ (Edition Date)</label>
+                <input type="date" id="pdfDate">
+              </div>
+              <div class="form-group">
+                <label for="pdfPages">మొత్తం పేజీలు (Total Pages)</label>
+                <input type="number" id="pdfPages" value="6" min="1" max="32">
+              </div>
+            </div>
+
+            <!-- Direct PDF File Drop Zone -->
+            <div class="form-group">
+              <label style="font-weight:800; color:var(--primary);">📁 కంప్యూటర్ నుండి డైరెక్ట్ PDF ఫైల్ ఎంచుకోండి (Select PDF File)</label>
+              <div class="file-drop-zone" id="pdfDropZone" onclick="document.getElementById('pdfFileInput').click()">
+                <div style="font-size: 40px; margin-bottom: 6px;">📑</div>
+                <div style="font-weight: 800; font-size: 15px; color: var(--text-main); font-family:var(--font-telugu);">
+                  కంప్యూటర్ నుండి PDF ఫైల్ ఎంచుకోవడానికి ఇక్కడ క్లిక్ చేయండి
+                </div>
+                <small style="color: var(--text-muted); font-size: 12.5px; display:block; margin-top:4px;">
+                  లేదా PDF ఫైల్‌ను ఇక్కడికి డ్రాగ్ & డ్రాప్ చేయండి (.pdf format)
+                </small>
+                <input type="file" id="pdfFileInput" accept="application/pdf,.pdf" style="display:none;" onchange="handlePdfFileSelect(this)">
+              </div>
+
+              <!-- Selected File Info Banner -->
+              <div id="selectedFileBox" class="file-selected-box" style="display:none;">
+                <div class="file-name-label">
+                  <span>✅</span> <span id="selectedFileName">file.pdf</span>
+                </div>
+                <span class="file-size-badge" id="selectedFileSize">0 KB</span>
+              </div>
+            </div>
+
+            <!-- Optional External Link toggle -->
+            <div style="margin-bottom:16px;">
+              <a href="#" onclick="toggleUrlInput(event)" style="font-size:12.5px; color:var(--text-muted); text-decoration:underline;">లేదా ఆన్‌లైన్ లింక్ (URL) ఇవ్వాలనుకుంటున్నారా?</a>
+              <div id="pdfUrlWrap" style="display:none; margin-top:8px;">
+                <input type="url" id="pdfUrl" placeholder="https://... లేదా డ్రైవ్ / క్లౌడ్ లింక్">
+              </div>
+            </div>
+
+            <button class="btn" onclick="uploadPDF()" id="pdfUploadSubmitBtn" style="width:100%; padding:14px;">
+              <span id="pdfBtnText">💾 ఈ-పేపర్ PDFని అప్‌లోడ్ చేసి ప్రచురించండి</span>
+            </button>
+          </div>
+
+          <!-- TAB 2: News Publisher -->
+          <div id="newsTab" class="admin-subtab" style="display:none">
+            <h3 style="margin-bottom:14px; color:var(--primary); font-family:var(--font-telugu);">📰 తాజా వార్తను ప్రచురించండి (Publish Daily News)</h3>
+            <div class="form-group">
+              <label for="newsTitle">వార్త శీర్షిక (News Headline)</label>
+              <input type="text" id="newsTitle" placeholder="వార్త ప్రధాన ముఖ్యాంశం రాయండి...">
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+              <div class="form-group">
+                <label for="newsCategory">వర్గం (Category)</label>
+                <select id="newsCategory">
+                  <option value="Konaseema">📍 కోనసీమ జిల్లా వార్తలు</option>
+                  <option value="AP">🏛️ ఆంధ్రప్రదేశ్ వార్తలు</option>
+                  <option value="National">🇮🇳 జాతీయం & రాజకీయం</option>
+                  <option value="Agriculture">🌾 వ్యవసాయం & గ్రామీణం</option>
+                  <option value="Cinema">🎬 సినిమా & వినోదం</option>
+                  <option value="Sports">🏆 క్రీడలు</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="newsMandal">ప్రాంతం / మండలం (Mandal / District)</label>
+                <input type="text" id="newsMandal" placeholder="ఉదా: అమలాపురం / రాజోలు / కొత్తపేట" value="అమలాపురం">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="newsImage">వార్త చిత్రం లింక్ (Image URL)</label>
+              <input type="url" id="newsImage" placeholder="https://images.unsplash.com/... లేదా ఏదైనా చిత్రం లింక్" oninput="previewNewsImage(this.value)">
+              <div id="imagePreviewWrap" style="display:none; margin-top:8px;">
+                <img id="imagePreview" src="" alt="Preview" style="max-height:160px; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="newsText">పూర్తి వార్తా సమాచారం (News Content)</label>
+              <textarea id="newsText" placeholder="వివరణాత్మక వార్తా సమాచారం రాయండి..."></textarea>
+            </div>
+            <div class="form-group" style="display:flex; align-items:center; gap:8px;">
+              <input type="checkbox" id="isLeadStory" style="width:auto; cursor:pointer;">
+              <label for="isLeadStory" style="margin:0; cursor:pointer; font-weight:800; color:var(--primary);">🔥 ఈ వార్తను హోమ్ పేజీ ప్రధాన లీడ్ వార్తగా చేయండి (Make Today's Lead Story)</label>
+            </div>
+            <button class="btn" onclick="addNews()" style="width:100%; padding:14px;">
+              <span>🚀 వార్తను వెంటనే ప్రచురించండి</span>
+            </button>
+          </div>
+
+          <!-- TAB 3: Breaking News Updater -->
+          <div id="tickerTab" class="admin-subtab" style="display:none">
+            <h3 style="margin-bottom:14px; color:var(--primary); font-family:var(--font-telugu);">⚡ లైవ్ బ్రేకింగ్ న్యూస్ టిక్కర్ నిర్వహణ (Manage Breaking News)</h3>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">వెబ్‌సైట్ పైన స్క్రోల్ అయ్యే బ్రేకింగ్ వార్తలను ఇక్కడ మార్చవచ్చు.</p>
+            
+            <div class="form-group">
+              <label for="tickerText">కొత్త బ్రేకింగ్ న్యూస్ హెడ్‌లైన్</label>
+              <input type="text" id="tickerText" placeholder="ఉదా: బ్రేకింగ్: కోనసీమలో నేడు విస్తారంగా వర్షాలు కురిసే అవకాశం...">
+            </div>
+            <button class="btn btn-gold" onclick="addTickerItem()" style="width:100%; margin-bottom:20px;">
+              <span>➕ బ్రేకింగ్ న్యూస్ జోడించండి</span>
+            </button>
+
+            <div class="section-heading" style="font-size:16px; margin-bottom:10px;">ప్రస్తుత బ్రేకింగ్ హెడ్‌లైన్లు:</div>
+            <div id="adminTickerList" style="background:var(--bg-subtle); border-radius:var(--radius-sm); border:1px solid var(--border-color); padding:12px;">
+              <!-- Rendered by app.js -->
+            </div>
+          </div>
+
+          <!-- TAB 4: Daily Poll & Editorial -->
+          <div id="pollTab" class="admin-subtab" style="display:none">
+            <h3 style="margin-bottom:14px; color:var(--primary); font-family:var(--font-telugu);">📊 నేటి ప్రజాభిప్రాయ సేకరణ & సంపాదకీయం అప్‌డేట్</h3>
+            
+            <div style="background:var(--bg-subtle); padding:18px; border-radius:var(--radius-sm); margin-bottom:20px; border:1px solid var(--border-color);">
+              <h4 style="color:var(--text-main); font-size:16px; margin-bottom:12px;">📊 నేటి పోల్ ప్రశ్న & ఆప్షన్లు:</h4>
+              <div class="form-group">
+                <label for="pollQInput">పోల్ ప్రశ్న (Question)</label>
+                <input type="text" id="pollQInput" placeholder="నేటి ప్రశ్న నమోదు చేయండి...">
+              </div>
+              <div class="form-group">
+                <label for="pollOpt1">ఆప్షన్ 1</label>
+                <input type="text" id="pollOpt1" placeholder="ఉదా: చాలా బాగుంది">
+              </div>
+              <div class="form-group">
+                <label for="pollOpt2">ఆప్షన్ 2</label>
+                <input type="text" id="pollOpt2" placeholder="ఉదా: మెరుగుపడాలి">
+              </div>
+              <div class="form-group">
+                <label for="pollOpt3">ఆప్షన్ 3</label>
+                <input type="text" id="pollOpt3" placeholder="ఉదా: సరిపోదు">
+              </div>
+              <button class="btn" onclick="savePollSettings()" style="width:100%;">
+                <span>💾 నేటి పోల్‌ను అప్‌డేట్ చేయండి</span>
+              </button>
+            </div>
+
+            <div style="background:var(--bg-subtle); padding:18px; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
+              <h4 style="color:var(--text-main); font-size:16px; margin-bottom:12px;">✍️ నేటి సంపాదకీయం (Editorial Quote by Kadali Pallaparaju):</h4>
+              <div class="form-group">
+                <label for="editorialTextInput">సంపాదకీయ సందేశం</label>
+                <textarea id="editorialTextInput" placeholder="నేటి సంపాదకీయ సందేశం రాయండి..."></textarea>
+              </div>
+              <button class="btn btn-gold" onclick="saveEditorialQuote()" style="width:100%;">
+                <span>💾 సంపాదకీయాన్ని అప్‌డేట్ చేయండి</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- TAB 5: Manage All Published Content -->
+          <div id="manageTab" class="admin-subtab" style="display:none">
+            <h3 style="margin-bottom:14px; color:var(--primary); font-family:var(--font-telugu);">🗂️ ప్రచురించిన కంటెంట్ మేనేజర్ (Edit / Delete Everything)</h3>
+            
+            <div style="margin-bottom:24px;">
+              <h4 style="font-size:16px; margin-bottom:10px; color:var(--primary);">📄 ప్రచురించిన ఈ-పేపర్ సంచికలు:</h4>
+              <div id="adminEditionsList" style="display:flex; flex-direction:column; gap:8px;">
+                <!-- Rendered by app.js -->
+              </div>
+            </div>
+
+            <div>
+              <h4 style="font-size:16px; margin-bottom:10px; color:var(--primary);">📰 ప్రచురించిన వార్తా కథనాలు:</h4>
+              <div id="adminNewsManageList" style="display:flex; flex-direction:column; gap:8px;">
+                <!-- Rendered by app.js -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p id="statusMsg" class="status" style="display:none;"></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- PDF VIEWER MODAL -->
+  <div class="modal-overlay" id="pdfModal" onclick="closeModalOnBackdrop(event)">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div class="modal-title" id="pdfModalTitle">
+          <span>📄</span> ఉదయ నేత్రం ఈ-పేపర్ రీడర్
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <a id="pdfDirectDownload" href="#" target="_blank" class="small-btn edit-btn" style="text-decoration:none;">
+            <span>⬇️ డౌన్‌లోడ్</span>
+          </a>
+          <a id="pdfNewTab" href="#" target="_blank" class="small-btn" style="background:#475569; color:white; text-decoration:none;">
+            <span>↗️ కొత్త ట్యాబ్‌లో ఓపెన్</span>
+          </a>
+          <button class="modal-close-btn" onclick="closePdfModal()" title="Close viewer">✕</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <iframe id="pdfIframe" class="modal-iframe" title="PDF Viewer"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARTICLE VIEW MODAL (WITH TEXT-TO-SPEECH AUDIO NARRATION) -->
+  <div class="modal-overlay" id="articleModal" onclick="closeArticleOnBackdrop(event)">
+    <div class="modal-window article-modal-window">
+      <div class="modal-header">
+        <div class="modal-title" id="articleModalCategory">📰 వార్తా విశేషం</div>
+        <button class="modal-close-btn" onclick="closeArticleModal()">✕</button>
+      </div>
+      <div class="article-modal-body">
+        <div id="articleModalDate" style="color:var(--text-muted); font-size:13px; margin-bottom:8px; font-family:var(--font-telugu);"></div>
+        <h2 id="articleModalTitle" style="color:var(--primary); font-family:var(--font-telugu); font-size:24px; font-weight:900; margin-bottom:16px; line-height:1.4;"></h2>
+        
+        <!-- Audio Reader Bar -->
+        <div class="article-audio-bar">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <button class="tts-btn" id="ttsPlayBtn" onclick="toggleAudioReading()">
+              <span id="ttsIcon">🔊</span> <span id="ttsText">వార్త వినండి (Listen)</span>
+            </button>
+            <span id="ttsStatus" style="font-size:12px; color:var(--text-muted);">ఆడియో రీడర్ సిద్ధంగా ఉంది</span>
+          </div>
+          <div class="news-share-btns">
+            <button class="news-share-btn" onclick="shareCurrentArticle()" title="Share on WhatsApp">W</button>
+            <button class="news-share-btn" onclick="shareCurrentArticleTelegram()" title="Share on Telegram">✈</button>
+            <button class="news-share-btn" onclick="copyArticleLink()" title="Copy Link">🔗</button>
+          </div>
+        </div>
+
+        <div id="articleModalImageWrap" style="margin-bottom:18px; display:none;">
+          <img id="articleModalImage" src="" alt="News Image" style="width:100%; border-radius:var(--radius-sm); max-height:340px; object-fit:cover;">
+        </div>
+        <div id="articleModalText" style="font-family:var(--font-telugu); font-size:16.5px; line-height:1.85; color:var(--text-main); white-space:pre-wrap;"></div>
+        
+        <div style="margin-top:28px; padding-top:18px; border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+          <button class="btn btn-gold" onclick="shareCurrentArticle()">
+            <span>💬 వాట్సాప్‌లో షేర్ చేయండి</span>
+          </button>
+          <button class="btn btn-outline" onclick="closeArticleModal()">మూసివేయండి (Close)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <h3>UDHAYA NETRAM (ఉదయ నేత్రం)</h3>
+        <p>డాక్టర్ బి.ఆర్. అంబేద్కర్ కోనసీమ మరియు ఆంధ్రప్రదేశ్ వార్తలకు నిష్పక్షపాత వేదిక. ప్రతిరోజూ ఉదయం డిజిటల్ ఈ-పేపర్ ద్వారా నిరంతరం ప్రజా సేవలో.</p>
+        <div class="socials" style="margin-top: 16px;">
+          <a href="https://facebook.com" target="_blank" class="social-btn fb">f</a>
+          <a href="https://twitter.com" target="_blank" class="social-btn x">𝕏</a>
+          <a href="https://wa.me/919848556806" target="_blank" class="social-btn wa">W</a>
+          <a href="https://t.me" target="_blank" class="social-btn tg">✈</a>
+          <a href="https://youtube.com" target="_blank" class="social-btn yt">▶</a>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <h4>త్వరిత లింకులు</h4>
+        <ul>
+          <li><a onclick="showPage('home')">🏠 హోమ్ పేజీ</a></li>
+          <li><a onclick="showPage('latest')">📰 తాజా వార్తలు</a></li>
+          <li><a onclick="showPage('epaper')">📄 నేటి ఈ-పేపర్</a></li>
+          <li><a onclick="showPage('classifieds')">📢 ప్రకటనల వివరాలు</a></li>
+          <li><a onclick="showPage('contact')">📞 సంప్రదించండి</a></li>
+          <li><a onclick="showPage('admin')">⚙️ అడ్మిన్ లాగిన్</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-contact">
+        <h4>కార్యాలయం & సంప్రదింపులు</h4>
+        <p>👤 కడలి పల్లపరాజు (సంపాదకుడు & ప్రచురణకర్త)</p>
+        <p>📍 రెడ్ బ్రిడ్జ్ సమీపంలో, అమలాపురం, కోనసీమ</p>
+        <p>📞 9848556806</p>
+        <p>✉️ admin@udhayanetram.com</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container">
+        © 2026 Udhaya Netram Daily Telugu E-Paper. All Rights Reserved. RNI Regd. Digital Telugu Media.
+      </div>
+    </div>
+  </footer>
+
+  <!-- App Script -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
