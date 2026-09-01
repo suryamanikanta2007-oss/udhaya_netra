@@ -1,0 +1,17 @@
+# Environment Variables & Keys
+.env
+*.local
+
+# Node Dependencies
+node_modules/
+package-lock.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# System & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

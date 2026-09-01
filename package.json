@@ -1,0 +1,19 @@
+{
+  "name": "udhaya-netram",
+  "version": "1.0.0",
+  "description": "Udhaya Netram (ఉదయ నేత్రం) - Daily Telugu E-Paper & News Web Portal",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "telugu",
+    "epaper",
+    "news",
+    "amalapuram",
+    "konaseema"
+  ],
+  "author": "Kadali Pallaparaju",
+  "license": "ISC"
+}
