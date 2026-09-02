@@ -102,14 +102,22 @@ public class MainActivity extends AppCompatActivity {
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
         settings.setDatabaseEnabled(true);
-        settings.setLoadWithOverviewMode(true);
+        
+        // Mobile Viewport Configuration (renders in full phone view, not zoomed-out laptop overview)
         settings.setUseWideViewPort(true);
-        settings.setBuiltInZoomControls(true);
+        settings.setLoadWithOverviewMode(false);
+        settings.setBuiltInZoomControls(false);
         settings.setDisplayZoomControls(false);
-        settings.setSupportZoom(true);
+        settings.setSupportZoom(false);
         settings.setAllowFileAccess(true);
         settings.setAllowContentAccess(true);
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
+
+        // Explicitly set mobile User-Agent to ensure mobile responsive layouts trigger
+        String defaultUA = settings.getUserAgentString();
+        if (defaultUA != null && !defaultUA.contains("Mobile")) {
+            settings.setUserAgentString(defaultUA + " Mobile/15E148 UdhayaNetramMobileApp");
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);

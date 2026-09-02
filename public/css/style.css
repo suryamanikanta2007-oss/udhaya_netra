@@ -1677,20 +1677,43 @@ footer {
 }
 
 @media (max-width: 768px) {
+  .container {
+    width: 100% !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  .topbar-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .topbar-right {
+    width: 100%;
+    justify-content: space-between;
+  }
   .header-inner {
     flex-direction: column;
     text-align: center;
-    gap: 16px;
+    gap: 14px;
+    padding: 10px 0;
   }
   .brand {
     flex-direction: column;
     text-align: center;
+    gap: 8px;
+  }
+  .logo-symbol {
+    width: 60px;
+    height: 60px;
   }
   .header-right {
     align-items: center;
+    width: 100%;
+    justify-content: center;
   }
   .nav-wrapper {
     flex-wrap: wrap;
+    padding: 8px 12px;
   }
   nav {
     display: none;
@@ -1708,14 +1731,49 @@ footer {
   .nav-search {
     width: 100%;
     order: 2;
+    margin-top: 8px;
   }
   .nav-search:focus-within {
     width: 100%;
   }
   .logo-main {
-    font-size: 32px;
+    font-size: 28px !important;
   }
   .logo-telugu {
-    font-size: 24px;
+    font-size: 22px !important;
+  }
+  .lead-story-section, .feature-row, .news-grid, .epaper-grid, .grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .modal-content, .reader-modal-inner {
+    width: 96% !important;
+    margin: 10px auto !important;
+    max-height: 90vh !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 15px;
+  }
+  .masthead-motto {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .brand-title-main {
+    font-size: 26px !important;
+  }
+  .hero-news-title {
+    font-size: 18px !important;
+    line-height: 1.4 !important;
+  }
+  .news-card-title {
+    font-size: 16px !important;
+  }
+  .btn-primary, .btn-download {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 16px;
   }
 }
