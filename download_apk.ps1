@@ -1,24 +1,23 @@
-# Fetch job logs using redirect
+# Monitor the latest APK workflow run and download APK when finished
 $ErrorActionPreference = "Continue"
 
-$jobsUrl = "https://api.github.com/repos/suryamanikanta2007-oss/udhaya_netra/actions/runs/33625936656/jobs"
-$jobs = Invoke-RestMethod -Uri $jobsUrl -Headers @{"User-Agent"="Mozilla/5.0"}
-$jobId = $jobs.jobs[0].id
-Write-Host "Fetching logs for Job ID: $jobId"
+Write-Host "Monitoring GitHub Actions Build..." -ForegroundColor Cyan
 
-$logUrl = "https://api.github.com/repos/suryamanikanta2007-oss/udhaya_netra/actions/jobs/$jobId/logs"
-try {
-    $wc = New-Object Net.WebClient
-    $wc.Headers.Add("User-Agent", "Mozilla/5.0")
-    $logContent = $wc.DownloadString($logUrl)
-    $lines = $logContent -split "`n"
-    Write-Host "Total Log Lines: $($lines.Count)"
-    
-    # Filter for ERROR, FAILED, or FAILURE
-    $errLines = $lines | Select-String -Pattern "error:|FAILED|Exception|AAPT:" -Context 2,2
-    foreach ($m in $errLines) {
-        Write-Host $m.ToString() -ForegroundColor Red
+$timeoutSeconds = 180
+$elapsed = 0
+
+while ($elapsed -lt $timeoutSeconds) {
+    $url = "https://api.github.com/repos/suryamanikanta2007-oss/udhaya_netra/actions/runs?per_page=5"
+    $runs = Invoke-RestMethod -Uri $url -Headers @{"User-Agent"="Mozilla/5.0"}
+    $apkRun = $runs.workflow_runs | Where-Object { $_.name -eq "Build Udhaya Netram Android APK" } | Select-Object -First 1
+
+    if ($apkRun) {
+        Write-Host "[$elapsed s] Run ID: $($apkRun.id) | Status: $($apkRun.status) | Conclusion: $($apkRun.conclusion)" -ForegroundColor Yellow
+        if ($apkRun.status -eq "completed") {
+            Write-Host "Build Finished with conclusion: $($apkRun.conclusion)" -ForegroundColor $(if ($apkRun.conclusion -eq "success") { "Green" } else { "Red" })
+            break
+        }
     }
-} catch {
-    Write-Host "Log fetch error: $($_.Exception.Message)"
+    Start-Sleep -Seconds 10
+    $elapsed += 10
 }
