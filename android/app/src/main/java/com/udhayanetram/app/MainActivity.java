@@ -2,6 +2,8 @@ package com.udhayanetram.app;
 
 import android.annotation.SuppressLint;
 import android.app.DownloadManager;
+import android.content.ActivityNotFoundException;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,6 +18,7 @@ import android.os.Looper;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.URLUtil;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Target Website URL (GitHub Pages / Firebase / Custom Domain)
     public static final String WEB_URL = "https://suryamanikanta2007-oss.github.io/udhaya_netra/";
+    private static final int FILE_CHOOSER_REQUEST_CODE = 1001;
 
     private WebView webView;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -43,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout offlineLayout;
     private Button btnRetry;
 
+    private ValueCallback<Uri[]> filePathCallback;
     private boolean doubleBackToExitPressedOnce = false;
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -133,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         // WebViewClient for Navigation and Link Handling
         webView.setWebViewClient(new CustomWebViewClient());
 
-        // WebChromeClient for Progress and Dialogs
+        // WebChromeClient for Progress, File Uploads, and Dialogs
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
@@ -142,6 +147,35 @@ public class MainActivity extends AppCompatActivity {
                     progressBar.setProgress(newProgress);
                 } else {
                     progressBar.setVisibility(View.GONE);
+                }
+            }
+
+            // HTML5 <input type="file"> Chooser Handler (for PDF & Image uploads from Android)
+            @Override
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+                if (MainActivity.this.filePathCallback != null) {
+                    MainActivity.this.filePathCallback.onReceiveValue(null);
+                    MainActivity.this.filePathCallback = null;
+                }
+                MainActivity.this.filePathCallback = filePathCallback;
+
+                Intent intent = null;
+                try {
+                    intent = fileChooserParams.createIntent();
+                } catch (Exception e) {
+                    intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("*/*");
+                    intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"application/pdf", "image/*"});
+                }
+
+                try {
+                    startActivityForResult(Intent.createChooser(intent, "Select PDF / File to Upload"), FILE_CHOOSER_REQUEST_CODE);
+                    return true;
+                } catch (ActivityNotFoundException e) {
+                    MainActivity.this.filePathCallback = null;
+                    Toast.makeText(MainActivity.this, "Cannot open file manager", Toast.LENGTH_SHORT).show();
+                    return false;
                 }
             }
         });
@@ -273,6 +307,31 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == FILE_CHOOSER_REQUEST_CODE) {
+            if (filePathCallback == null) return;
+            Uri[] results = null;
+            if (resultCode == RESULT_OK && data != null) {
+                String dataString = data.getDataString();
+                ClipData clipData = data.getClipData();
+                if (clipData != null) {
+                    results = new Uri[clipData.getItemCount()];
+                    for (int i = 0; i < clipData.getItemCount(); i++) {
+                        results[i] = clipData.getItemAt(i).getUri();
+                    }
+                } else if (dataString != null) {
+                    results = new Uri[]{Uri.parse(dataString)};
+                } else if (data.getData() != null) {
+                    results = new Uri[]{data.getData()};
+                }
+            }
+            filePathCallback.onReceiveValue(results);
+            filePathCallback = null;
+        }
     }
 
     private boolean isNetworkAvailable() {
