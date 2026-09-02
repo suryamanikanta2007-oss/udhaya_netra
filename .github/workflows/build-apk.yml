@@ -1,4 +1,4 @@
-name: Build Udhaya Netram Android APK
+name: Build Udhaya Netram Android APK & Play Store Bundle
 
 on:
   push:
@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   build-apk:
-    name: Build Android APK
+    name: Build Android APK & AAB Bundle
     runs-on: ubuntu-latest
 
     steps:
@@ -26,26 +26,27 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Build Android Debug APK
+      - name: Build Android Debug APK & Play Store AAB Bundle
         working-directory: ./android
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace > ../build_log.txt 2>&1 || (cat ../build_log.txt && exit 1)
+          ./gradlew assembleDebug bundleRelease --stacktrace > ../build_log.txt 2>&1 || (cat ../build_log.txt && exit 1)
 
-      - name: Prepare APK Output
+      - name: Prepare APK & AAB Output
         if: success()
         run: |
-          mkdir -p output_apks
-          find android/app/build/outputs/apk/ -name "*.apk" -exec cp {} output_apks/ \;
-          echo "Generated APK files in output_apks:"
-          ls -la output_apks/
+          mkdir -p output_binaries
+          find android/app/build/outputs/apk/ -name "*.apk" -exec cp {} output_binaries/ \;
+          find android/app/build/outputs/bundle/ -name "*.aab" -exec cp {} output_binaries/ \;
+          echo "Generated output binaries:"
+          ls -la output_binaries/
 
-      - name: Upload APK Artifacts
+      - name: Upload APK & AAB Artifacts
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: UdhayaNetram-APK
-          path: output_apks/*.apk
+          name: UdhayaNetram-PlayStore-Binaries
+          path: output_binaries/*
           retention-days: 30
 
       - name: Upload Build Log on Failure
@@ -55,16 +56,17 @@ jobs:
           name: build-log
           path: build_log.txt
 
-      - name: Publish GitHub Release with APK
+      - name: Publish GitHub Release with APK & AAB
         if: success() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0.0-apk
           name: "Udhaya Netram Android App v1.0.0"
           body: |
-            ## 📱 Udhaya Netram (ఉదయ నేత్రం) Android APK
+            ## 📱 Udhaya Netram (ఉదయ నేత్రం) Android APK & Play Store Bundle
             
-            Download the latest Android App APK below and install on your phone.
+            - **`app-debug.apk`**: Direct installable Android APK for phones.
+            - **`app-release.aab`**: Google Play Store App Bundle for Google Play Console upload.
             
             ### ✨ Features:
             - 📰 Live Telugu Daily News & E-Paper
@@ -72,7 +74,7 @@ jobs:
             - 🔄 Pull to Refresh Breaking News
             - 🌐 Offline Mode Support
             - ⚡ Super Fast & Lightweight (< 5 MB)
-          files: output_apks/*.apk
+          files: output_binaries/*
           draft: false
           prerelease: false
         env:
