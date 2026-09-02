@@ -1,10 +1,24 @@
-# Get jobs of the failed run
-$runId = "33624931591"
-$url = "https://api.github.com/repos/suryamanikanta2007-oss/udhaya_netra/actions/runs/$runId/jobs"
-$jobs = Invoke-RestMethod -Uri $url -Headers @{"User-Agent"="Mozilla/5.0"}
-foreach ($j in $jobs.jobs) {
-    Write-Host "Job: $($j.name) - $($j.conclusion)" -ForegroundColor Yellow
-    foreach ($step in $j.steps) {
-        Write-Host "  Step: $($step.name) -> $($step.conclusion) (number: $($step.number))"
+# Fetch job logs using redirect
+$ErrorActionPreference = "Continue"
+
+$jobsUrl = "https://api.github.com/repos/suryamanikanta2007-oss/udhaya_netra/actions/runs/33625936656/jobs"
+$jobs = Invoke-RestMethod -Uri $jobsUrl -Headers @{"User-Agent"="Mozilla/5.0"}
+$jobId = $jobs.jobs[0].id
+Write-Host "Fetching logs for Job ID: $jobId"
+
+$logUrl = "https://api.github.com/repos/suryamanikanta2007-oss/udhaya_netra/actions/jobs/$jobId/logs"
+try {
+    $wc = New-Object Net.WebClient
+    $wc.Headers.Add("User-Agent", "Mozilla/5.0")
+    $logContent = $wc.DownloadString($logUrl)
+    $lines = $logContent -split "`n"
+    Write-Host "Total Log Lines: $($lines.Count)"
+    
+    # Filter for ERROR, FAILED, or FAILURE
+    $errLines = $lines | Select-String -Pattern "error:|FAILED|Exception|AAPT:" -Context 2,2
+    foreach ($m in $errLines) {
+        Write-Host $m.ToString() -ForegroundColor Red
     }
+} catch {
+    Write-Host "Log fetch error: $($_.Exception.Message)"
 }
