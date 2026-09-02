@@ -7,7 +7,7 @@
     <string name="offline_title">ఇంటర్నెట్ కనెక్షన్ లేదు</string>
     <string name="offline_desc">దయచేసి మీ మొబైల్ డేటా లేదా వైఫై కనెక్షన్ తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.</string>
     <string name="retry">మళ్లీ ప్రయత్నించండి (Retry)</string>
-    <string name="exit_prompt">యాప్ నుండి నిష్క్రమించడానికి మళ్లీ 'Back' నొక్కండి</string>
+    <string name="exit_prompt">యాప్ నుండి నిష్క్రమించడానికి మళ్లీ \'Back\' నొక్కండి</string>
     <string name="download_starting">ఈ-పేపర్ డౌన్‌లోడ్ ప్రారంభమవుతోంది...</string>
     <string name="download_complete">డౌన్‌లోడ్ పూర్తయింది!</string>
     <string name="permission_denied">డౌన్‌లోడ్ కోసం నిల్వ అనుమతి (Storage Permission) అవసరం</string>

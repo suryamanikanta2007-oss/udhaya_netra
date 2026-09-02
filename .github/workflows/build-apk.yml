@@ -31,12 +31,12 @@ jobs:
         with:
           packages: 'platforms;android-34 build-tools;34.0.0'
 
-      - name: Make Gradle wrapper executable
-        run: chmod +x android/gradlew
-
       - name: Build Android Debug APK
         working-directory: ./android
-        run: ./gradlew assembleDebug --stacktrace --no-daemon
+        run: |
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          chmod +x gradlew
+          ./gradlew assembleDebug --stacktrace
 
       - name: Prepare APK Output
         run: |
