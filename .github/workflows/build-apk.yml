@@ -26,15 +26,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          packages: 'platforms;android-34 build-tools;34.0.0'
-
-      - name: Build Android Debug APK
+      - name: Accept Android SDK Licenses & Build APK
         working-directory: ./android
         run: |
-          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          echo "Using Android SDK at: $ANDROID_HOME"
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
           chmod +x gradlew
           ./gradlew assembleDebug --stacktrace
 
