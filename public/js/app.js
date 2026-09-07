@@ -294,6 +294,22 @@ window.loginAdmin = async function() {
     }
   }
 
+  // 3. Local/Static Host Admin Fallback (for static deployments like GitHub Pages)
+  if ((email === "admin@udhayanetram.com" || email === "admin") && password === "admin123") {
+    authToken = "local_static_admin_token_" + Date.now();
+    if (remember) {
+      localStorage.setItem("udhaya_admin_token", authToken);
+    } else {
+      sessionStorage.setItem("udhaya_admin_token", authToken);
+    }
+    isAdmin = true;
+    updateAdminUI(true);
+    status("🎉 అడ్మిన్ లాగిన్ విజయవంతమైంది! (Local Admin Mode)", true);
+    await loadEditions();
+    await loadNews();
+    return;
+  }
+
   status("ఈమెయిల్ లేదా పాస్‌వర్డ్ తప్పుగా ఉంది. దయచేసి సరైన వివరాలు నమోదు చేయండి.", false);
 };
 
@@ -1632,7 +1648,10 @@ window.toggleMobileMenu = function() {
 
 function handleHashNavigation() {
   const hash = window.location.hash;
-  if (!hash) return;
+  if (!hash || hash === "#home" || hash === "#") {
+    showPage("home");
+    return;
+  }
 
   if (hash.startsWith("#article=")) {
     const id = decodeURIComponent(hash.replace("#article=", ""));
@@ -1655,6 +1674,15 @@ function handleHashNavigation() {
     showPage("admin");
   }
 }
+
+// Open Lead Article on Home Page
+window.openLeadArticle = function() {
+  if (currentNewsData && currentNewsData.length > 0) {
+    viewArticle(currentNewsData[0].id);
+  } else {
+    showPage("latest");
+  }
+};
 
 function setupKeyboardAccessibility() {
   window.addEventListener("keydown", (e) => {
@@ -1710,7 +1738,10 @@ window.openPDF = function(url, title) {
 
   if (titleEl) titleEl.innerText = title || "ఉదయ నేత్రం ఈ-పేపర్";
   if (frame) frame.src = cleanUrl;
-  if (dlLink) dlLink.href = cleanUrl;
+  if (dlLink) {
+    dlLink.href = cleanUrl;
+    dlLink.setAttribute("download", title ? `${title}.pdf` : "epaper.pdf");
+  }
   if (newTabLink) newTabLink.href = cleanUrl;
 
   if (modal) {
@@ -1741,10 +1772,16 @@ window.openLatestPDF = function() {
 // --------------------------------------------------------------------------
 function cleanPdfUrl(url) {
   if (!url) return "";
-  if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("data:") || url.startsWith("/uploads/")) {
+  if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("data:")) {
     return url;
   }
-  return `/uploads/${url}`;
+  if (url.startsWith("/uploads/")) {
+    return url.substring(1);
+  }
+  if (url.startsWith("uploads/")) {
+    return url;
+  }
+  return `uploads/${url}`;
 }
 
 function getCategoryLabel(cat) {

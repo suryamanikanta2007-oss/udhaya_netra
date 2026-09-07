@@ -25,7 +25,7 @@
   <meta name="twitter:image" content="https://udhayanetram.com/assets/images/editor-kadali.jpg">
   
   <!-- RSS Feed Discovery -->
-  <link rel="alternate" type="application/rss+xml" title="Udhaya Netram RSS Feed" href="/rss.xml">
+  <link rel="alternate" type="application/rss+xml" title="Udhaya Netram RSS Feed" href="rss.xml">
 
   <!-- Favicon SVG -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%239b0000'/><path d='M20 50 Q50 20 80 50 Q50 80 20 50 Z' fill='%23ffffff'/><circle cx='50' cy='50' r='14' fill='%23f59e0b'/><circle cx='50' cy='50' r='7' fill='%239b0000'/></svg>">
@@ -133,7 +133,7 @@
             <a href="https://wa.me/919848556806?text=Hi%20Udhaya%20Netram" target="_blank" rel="noopener noreferrer" class="social-btn wa" title="WhatsApp" aria-label="WhatsApp Channel">W</a>
             <a href="https://t.me/udhayanetram" target="_blank" rel="noopener noreferrer" class="social-btn tg" title="Telegram" aria-label="Telegram Channel">✈</a>
             <a href="https://youtube.com/@udhayanetram" target="_blank" rel="noopener noreferrer" class="social-btn yt" title="YouTube" aria-label="YouTube Channel">▶</a>
-            <a href="/rss.xml" target="_blank" class="social-btn rss" title="RSS Feed" aria-label="RSS Feed">📡</a>
+            <a href="rss.xml" target="_blank" class="social-btn rss" title="RSS Feed" aria-label="RSS Feed">📡</a>
           </div>
         </div>
       </div>
@@ -623,7 +623,13 @@
                 <div class="form-group">
                   <input type="text" id="pollOpt2" placeholder="ఆప్షన్ 2">
                 </div>
-                <button class="btn" onclick="savePollSettings()" style="width:100%;">💾 పోల్ అప్‌డేట్</button>
+                <button class="btn" onclick="savePollSettings()" style="width:100%; margin-bottom:16px;">💾 పోల్ అప్‌డేట్</button>
+
+                <h4 style="color:var(--primary); font-size:16px; margin-bottom:10px; padding-top:12px; border-top:1px dashed var(--border-color);">✍️ సంపాదకీయ సందేశం</h4>
+                <div class="form-group">
+                  <textarea id="editorialTextInput" rows="3" placeholder="నేటి సంపాదకీయ సందేశం రాయండి..."></textarea>
+                </div>
+                <button class="btn btn-gold" onclick="saveEditorialQuote()" style="width:100%;">💾 సంపాదకీయం అప్‌డేట్</button>
               </div>
             </div>
 
@@ -721,7 +727,7 @@
           <a href="https://wa.me/919848556806" target="_blank" rel="noopener noreferrer" class="social-btn wa" aria-label="WhatsApp">W</a>
           <a href="https://t.me/udhayanetram" target="_blank" rel="noopener noreferrer" class="social-btn tg" aria-label="Telegram">✈</a>
           <a href="https://youtube.com/@udhayanetram" target="_blank" rel="noopener noreferrer" class="social-btn yt" aria-label="YouTube">▶</a>
-          <a href="/rss.xml" target="_blank" class="social-btn rss" aria-label="RSS Feed">📡</a>
+          <a href="rss.xml" target="_blank" class="social-btn rss" aria-label="RSS Feed">📡</a>
         </div>
       </div>
 
@@ -750,7 +756,7 @@
     <div class="footer-bottom">
       <div class="container" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
         <span>© 2026 Udhaya Netram Daily Telugu E-Paper. All Rights Reserved.</span>
-        <span><a href="/sitemap.xml" style="color:var(--text-muted); text-decoration:none;">Sitemap</a> • <a href="/rss.xml" style="color:var(--text-muted); text-decoration:none;">RSS Feed</a></span>
+        <span><a href="sitemap.xml" style="color:var(--text-muted); text-decoration:none;">Sitemap</a> • <a href="rss.xml" style="color:var(--text-muted); text-decoration:none;">RSS Feed</a></span>
       </div>
     </div>
   </footer>

@@ -1,10 +1,12 @@
 // Service Worker for Udhaya Netram
-const CACHE_NAME = 'udhaya-cache-v1';
+const CACHE_NAME = 'udhaya-cache-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './css/style.css',
-  './js/app.js'
+  './js/app.js',
+  './js/config.js',
+  './manifest.json'
 ];
 
 self.addEventListener('install', (event) => {
