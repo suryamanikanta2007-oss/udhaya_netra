@@ -1,6 +1,6 @@
 /* ==============================================================================
    UDHAYA NETRAM - ENVIRONMENT CONFIGURATION LOADER
-   Loads API Keys & Configuration dynamically from .env / /api/config
+   Loads safe public settings dynamically from /api/config
    ============================================================================== */
 
 const DEFAULT_CONFIG = {
@@ -10,8 +10,13 @@ const DEFAULT_CONFIG = {
   editorPhone: "9848556806",
   editorEmail: "admin@udhayanetram.com",
   editorLocation: "Amalapuram, Konaseema",
-  adminEmail: "admin@udhayanetram.com",
-  adminPassword: "admin123",
+  socials: {
+    facebook: "https://facebook.com/udhayanetram",
+    twitter: "https://x.com/udhayanetram",
+    whatsapp: "https://wa.me/919848556806",
+    telegram: "https://t.me/udhayanetram",
+    youtube: "https://youtube.com/@udhayanetram"
+  },
   firebase: {
     apiKey: "AIzaSyDmnza1ol0Rvp-ciw3DsdZkr8NIfAGzj8A",
     authDomain: "udhayanetram.firebaseapp.com",
@@ -32,22 +37,21 @@ export async function loadAppConfig() {
       if (response.ok) {
         const envData = await response.json();
         activeConfig = {
-          portalName: envData.PORTAL_NAME || DEFAULT_CONFIG.portalName,
-          portalNameTelugu: envData.PORTAL_NAME_TELUGU || DEFAULT_CONFIG.portalNameTelugu,
-          editorName: envData.EDITOR_NAME || DEFAULT_CONFIG.editorName,
-          editorPhone: envData.EDITOR_PHONE || DEFAULT_CONFIG.editorPhone,
-          editorEmail: envData.EDITOR_EMAIL || DEFAULT_CONFIG.editorEmail,
-          editorLocation: envData.EDITOR_LOCATION || DEFAULT_CONFIG.editorLocation,
-          adminEmail: envData.ADMIN_EMAIL || DEFAULT_CONFIG.adminEmail,
-          adminPassword: envData.ADMIN_PASSWORD || DEFAULT_CONFIG.adminPassword,
+          portalName: envData.portalName || DEFAULT_CONFIG.portalName,
+          portalNameTelugu: envData.portalNameTelugu || DEFAULT_CONFIG.portalNameTelugu,
+          editorName: envData.editorName || DEFAULT_CONFIG.editorName,
+          editorPhone: envData.editorPhone || DEFAULT_CONFIG.editorPhone,
+          editorEmail: envData.editorEmail || DEFAULT_CONFIG.editorEmail,
+          editorLocation: envData.editorLocation || DEFAULT_CONFIG.editorLocation,
+          socials: DEFAULT_CONFIG.socials,
           firebase: {
-            apiKey: envData.FIREBASE_API_KEY || DEFAULT_CONFIG.firebase.apiKey,
-            authDomain: envData.FIREBASE_AUTH_DOMAIN || DEFAULT_CONFIG.firebase.authDomain,
-            projectId: envData.FIREBASE_PROJECT_ID || DEFAULT_CONFIG.firebase.projectId,
-            storageBucket: envData.FIREBASE_STORAGE_BUCKET || DEFAULT_CONFIG.firebase.storageBucket,
-            messagingSenderId: envData.FIREBASE_MESSAGING_SENDER_ID || DEFAULT_CONFIG.firebase.messagingSenderId,
-            appId: envData.FIREBASE_APP_ID || DEFAULT_CONFIG.firebase.appId,
-            measurementId: envData.FIREBASE_MEASUREMENT_ID || DEFAULT_CONFIG.firebase.measurementId
+            apiKey: envData.firebase?.apiKey || DEFAULT_CONFIG.firebase.apiKey,
+            authDomain: envData.firebase?.authDomain || DEFAULT_CONFIG.firebase.authDomain,
+            projectId: envData.firebase?.projectId || DEFAULT_CONFIG.firebase.projectId,
+            storageBucket: envData.firebase?.storageBucket || DEFAULT_CONFIG.firebase.storageBucket,
+            messagingSenderId: envData.firebase?.messagingSenderId || DEFAULT_CONFIG.firebase.messagingSenderId,
+            appId: envData.firebase?.appId || DEFAULT_CONFIG.firebase.appId,
+            measurementId: envData.firebase?.measurementId || DEFAULT_CONFIG.firebase.measurementId
           }
         };
       }
